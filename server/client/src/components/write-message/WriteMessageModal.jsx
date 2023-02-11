@@ -1,8 +1,8 @@
 import { Box, Modal } from "@mui/material";
-import { ImgMessage } from "./messagesStyle";
+import WriteMessage from "./WriteMessage";
 import { style } from "../../ui/muiStyle";
 
-const ImageZoom = ({open, setOpen, img}) => {
+const WriteMessageModal = ({ open, setOpen }) => {
     return (
         <Modal
             open={open}
@@ -11,10 +11,10 @@ const ImageZoom = ({open, setOpen, img}) => {
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                <ImgMessage src={img} />
+                <WriteMessage />
             </Box>
         </Modal>
     );
 };
 
-export default ImageZoom;
+export default WriteMessageModal;

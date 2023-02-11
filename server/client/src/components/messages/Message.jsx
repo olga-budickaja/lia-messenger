@@ -10,8 +10,8 @@ import {
 } from "./messagesStyle";
 import avatar1 from "../../assets/avatar1.png";
 import avatar2 from "../../assets/avatar2.png";
-import { Box, Button, IconButton } from "@mui/material";
-import { SaveAltOutlined, ZoomInOutlined } from "@mui/icons-material";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
+import { SaveAltOutlined, ShortcutOutlined, ZoomInOutlined } from "@mui/icons-material";
 import img from "../../assets/some.png";
 import ImageZoom from "./ImageZoom";
 import { useState } from "react";
@@ -31,12 +31,16 @@ const Message = ({type}) => {
                     <h6>Nataly</h6>
                     <Span>22.05.2023 in 10:31</Span>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Span>
-                        File
-                    </Span>
-                    <IconButton>
-                        <SaveAltOutlined />
-                    </IconButton>
+                    <Tooltip title="Download file">
+                        <IconButton>
+                            <SaveAltOutlined sx={{ width: "18px", height: 'auto' }} />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Answer">
+                        <IconButton>
+                            <ShortcutOutlined sx={{ width: "18px", height: 'auto' }} />
+                        </IconButton>
+                    </Tooltip>
                 </ContainerTitle>
                 <ContainerDesc type={type}>
                     <ContainerImg>

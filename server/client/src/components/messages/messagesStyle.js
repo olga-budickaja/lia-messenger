@@ -80,11 +80,11 @@ export const ButtonDrop = styled.div`
     right: 0;
     bottom: 15px;
 `;
-export const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    boxShadow: 24,
-};
+
+export const ButtonNew = styled.div`
+    position: fixed;
+    right: 40px;
+    bottom: 30px;
+`;
+
 
