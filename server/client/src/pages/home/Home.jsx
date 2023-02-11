@@ -1,8 +1,13 @@
+import { Container, ContainerAnswer } from "./homeStyle";
+import Messages from '../../components/messages/Messages'
+
 const Home = () => {
     return (
-        <div>
-            Home
-        </div>
+        <Container>
+            <ContainerAnswer>
+                <Messages />
+            </ContainerAnswer>
+        </Container>
     );
 };
 

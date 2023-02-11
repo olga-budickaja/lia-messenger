@@ -7,8 +7,8 @@ function App() {
   return (
     <div>
         <Navbar />
-        <Container maxWidth="xl" sx={{ minHeight: 'calc(100vh - 65px)' }}>
-            <AppRouter/>
+        <Container maxWidth="md" sx={{ minHeight: 'calc(100vh - 75px)' }}>
+            <AppRouter />
         </Container>
     </div>
   );
