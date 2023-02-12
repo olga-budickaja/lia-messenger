@@ -24,7 +24,7 @@ export const ContainerMessage = styled.div`
   width: 85%;
   align-self: ${(props) => props.type === "main" ? 'flex-start' : 'flex-end'};
   margin-left: ${(props) => props.type !== "rcv" && '40px'};
-  &:first-child {
+  &:first-of-type {
     width: 100%;
   }
   * {
@@ -38,7 +38,7 @@ export const ContainerTitle = styled.div`
   border-radius: 12px;
     gap: 20px;
     background: ${(props) => props.type === "main" ? cyan[50] : yellow[50]};
-  &:first-child {
+  &:first-of-type {
     background: ${(props) => props.type === "rcv" && cyan[50]};
   }
 `;

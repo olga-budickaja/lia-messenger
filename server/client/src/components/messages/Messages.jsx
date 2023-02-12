@@ -23,13 +23,13 @@ const Messages = ({type}) => {
                 </>
             </ContainerMessages>
             <ButtonNew onClick={() => setOpenWrite(true)}>
-                <IconButton>
+
                     <Tooltip title="Add new theme">
                         <ColorButton>
                             <AddOutlined />
                         </ColorButton>
                     </Tooltip>
-                </IconButton>
+
             </ButtonNew>
             <WriteMessageModal open={openWrite} setOpen={setOpenWrite}/>
         </>
