@@ -4,9 +4,9 @@ import {
 } from "./messagesStyle";
 import Message from "./Message";
 import { useState } from "react";
-import WriteMessageModal from "../write-message/WriteMessageModal";
+import WriteMessageModal from "../write-message-modal/WriteMessageModal";
 import { Tooltip } from "@mui/material";
-import { ColorButton } from "../../ui/muiStyle";
+import { ColorRoundButton } from "../../ui/muiStyle";
 import { AddOutlined } from "@mui/icons-material";
 
 const Messages = ({type}) => {
@@ -27,9 +27,9 @@ const Messages = ({type}) => {
             </ContainerMessages>
             <ButtonNew onClick={() => setOpenWrite(true)}>
                 <Tooltip title="Add new theme">
-                    <ColorButton>
+                    <ColorRoundButton>
                         <AddOutlined />
-                    </ColorButton>
+                    </ColorRoundButton>
                 </Tooltip>
             </ButtonNew>
             <WriteMessageModal open={openWrite} setOpen={setOpenWrite}/>
