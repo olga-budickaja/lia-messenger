@@ -5,7 +5,7 @@ import {
 import Message from "./Message";
 import { useState } from "react";
 import WriteMessageModal from "../write-message/WriteMessageModal";
-import { IconButton, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { ColorButton } from "../../ui/muiStyle";
 import { AddOutlined } from "@mui/icons-material";
 
@@ -15,7 +15,10 @@ const Messages = ({type}) => {
         <>
             <ContainerMessages>
                 <>
-                    <Message type="rcv" />
+                    <Message
+                        type="rcv"
+                        setOpenWrite={setOpenWrite}
+                    />
                     <Message type="snd" />
                     <Message type="main" />
                     <Message type="snd" />
@@ -23,13 +26,11 @@ const Messages = ({type}) => {
                 </>
             </ContainerMessages>
             <ButtonNew onClick={() => setOpenWrite(true)}>
-
-                    <Tooltip title="Add new theme">
-                        <ColorButton>
-                            <AddOutlined />
-                        </ColorButton>
-                    </Tooltip>
-
+                <Tooltip title="Add new theme">
+                    <ColorButton>
+                        <AddOutlined />
+                    </ColorButton>
+                </Tooltip>
             </ButtonNew>
             <WriteMessageModal open={openWrite} setOpen={setOpenWrite}/>
         </>

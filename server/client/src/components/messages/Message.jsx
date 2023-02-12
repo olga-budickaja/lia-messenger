@@ -16,7 +16,7 @@ import img from "../../assets/some.png";
 import ImageZoom from "./ImageZoom";
 import { useState } from "react";
 
-const Message = ({type}) => {
+const Message = ({type, setOpenWrite}) => {
     const [open, setOpen] = useState(false);
     const [openList, setOpenList] = useState(false);
     return (
@@ -31,7 +31,7 @@ const Message = ({type}) => {
                     <h6>Nataly</h6>
                     <Span>22.05.2023 in 10:31</Span>
                     <Box sx={{ flexGrow: 1 }} />
-                    <IconButton>
+                    <IconButton onClick={() => setOpenWrite(true)}>
                         <Tooltip title="Answer">
                             <ShortcutOutlined sx={{ width: "18px", height: 'auto' }} />
                         </Tooltip>
