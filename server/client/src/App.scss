@@ -48,6 +48,20 @@ body {
   width: 300px;
   height: 200px;
 }
+.success-enter {
+  opacity: 0;
+}
+.success-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.success-exit {
+  opacity: 1;
+}
+.success-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
 
 @media (max-width: 575px) {
   .list {

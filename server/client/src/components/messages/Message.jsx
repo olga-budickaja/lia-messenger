@@ -11,7 +11,7 @@ import {
 import avatar1 from "../../assets/avatar1.png";
 import avatar2 from "../../assets/avatar2.png";
 import { Box, Button, IconButton, Tooltip } from "@mui/material";
-import { SaveAltOutlined, ShortcutOutlined, ZoomInOutlined } from "@mui/icons-material";
+import { ShortcutOutlined, ZoomInOutlined } from "@mui/icons-material";
 import img from "../../assets/some.png";
 import ImageZoom from "./ImageZoom";
 import { useState } from "react";
@@ -31,11 +31,6 @@ const Message = ({type, setOpenWrite}) => {
                     <h6>Nataly</h6>
                     <Span>22.05.2023 in 10:31</Span>
                     <Box sx={{ flexGrow: 1 }} />
-                    <IconButton onClick={() => setOpenWrite(true)}>
-                        <Tooltip title="Download file">
-                            <SaveAltOutlined sx={{ width: "18px", height: 'auto' }} />
-                        </Tooltip>
-                    </IconButton>
                     <IconButton onClick={() => setOpenWrite(true)}>
                         <Tooltip title="Answer">
                             <ShortcutOutlined sx={{ width: "18px", height: 'auto' }} />

@@ -1,14 +1,26 @@
 import { useForm } from "react-hook-form";
-import { ErrorContainer, ErrorText, Form, Greeting, Input, InputContainer } from "./formsStyle";
-import { useState } from "react";
+import { ErrorContainer,
+    ErrorText,
+    Form,
+    Greeting,
+    Input,
+    InputContainer
+} from "./formsStyle";
+import { useContext, useRef, useState } from "react";
 import { ColorButton } from "../../ui/muiStyle";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
+import { CSSTransition } from 'react-transition-group';
+import { publicRequest } from "../../requestMethod";
+import { AuthContext } from "../../context/AuthContext";
 
-const RegisterForm = () => {
-    const [greeting, setGreeting] = useState(false);
+const RegisterForm = ({setToken}) => {
+    const { currentUser, setCurrentUser, login } = useContext(AuthContext);
     const CAPTCHA_KEY = process.env.REACT_APP_CAPTCHA_KEY;
     const [captchaIsGoogle, setCaptchaIsGoogle] = useState(false);
+    const [errorAxios, setErrorAxios] = useState(null);
+    const [inProp, setInProp] = useState(false);
+    const successRef = useRef(null);
 
     console.log(captchaIsGoogle)
 
@@ -24,22 +36,39 @@ const RegisterForm = () => {
         mode: "onBlur"
     });
 
-    const handleRegister= () => {
-        setGreeting(true);
+    const handleRegister = async (data) => {
+        try {
+            if (currentUser !== null) {
+                await login(data);
+                setToken(true);
+            } else {
+                await publicRequest.post('auth/register', data);
+                setCurrentUser(data)
+                setInProp(true);
+                setTimeout(() => setInProp(false), 2000);
+                setTimeout(() => setToken(true), 2200);
+            }
+        } catch (e) {
+            setErrorAxios(e.response.data.message);
+            setInProp(false);
+        }
     }
 
 
     return (
         <Form>
-            {greeting && (
-                <InputContainer>
-                    <Greeting>
-                        The account has been created. Thank you for joining AirTube. Log in please :)
-                    </Greeting>
-                </InputContainer>
+            {inProp && (
+                <CSSTransition successRef={successRef} in={inProp} timeout={200} classNames="my-node">
+                    <InputContainer ref={successRef}>
+                        <Greeting>
+                            Successful registration :)
+                        </Greeting>
+                    </InputContainer>
+                </CSSTransition>
+
             )}
             <Input
-                placeholder="username"
+                placeholder="username*"
                 {...register('username', {
                     required: "field is required",
                     minLength: {
@@ -58,7 +87,7 @@ const RegisterForm = () => {
                 }
             </ErrorContainer>
             <Input
-                placeholder="email"
+                placeholder="email*"
                 type="email"
                 {...register('email', {
                     required: "field is required",
@@ -79,10 +108,11 @@ const RegisterForm = () => {
             </ErrorContainer>
             <Input
                 placeholder="homepage"
-                type="homepage"
+                type="url"
                 {...register('homepage', {
+                    required: false,
                     pattern: {
-                        value: /^((ftp|http|https):\/\/)?www\.([A-z]+)\.([A-z]{2,})/,
+                        value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
                         message: "Invalid url"
                     }
                 })}
@@ -109,19 +139,17 @@ const RegisterForm = () => {
                 type="submit"
                 disabled={!isValid && !captchaIsGoogle}
             >
-                Register
+                Log in
                 {/*{isFetching*/}
                 {/*    ? <CircularProgress color="inherit" size="15px"/>*/}
                 {/*    : "Sign up"*/}
                 {/*}*/}
             </ColorButton>
-            {/*<ErrorContainer>*/}
-            {/*    {error && (*/}
-            {/*        <ErrorText>{errorAxios}</ErrorText>*/}
-            {/*    )}*/}
-
-            {/*</ErrorContainer>*/}
-            <Button>I have an account</Button>
+            <ErrorContainer>
+                {errorAxios && (
+                    <ErrorText>{errorAxios}</ErrorText>
+                )}
+            </ErrorContainer>
         </Form>
     );
 };

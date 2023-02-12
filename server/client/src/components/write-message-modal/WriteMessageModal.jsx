@@ -43,7 +43,7 @@ const WriteMessageModal = ({ open, setOpen }) => {
                     )
                     : (
                         <Box sx={{ padding: '30px' }}>
-                            <RegisterForm/>
+                            <RegisterForm setToken={setToken}/>
                         </Box>
                     )
                 }

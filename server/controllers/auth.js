@@ -1,8 +1,6 @@
 import { db } from "../db.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { request } from "express";
 
 dotenv.config();
 export const register = (req, res) => {
@@ -15,31 +13,10 @@ export const register = (req, res) => {
         if (err) return res.status(500).json(err);
         if (data.length) return res.status(409).json({ message: "User already exist!" });
         //CREATE NEW USER
-        const q = "INSERT INTO users (`username`, `email`, `avatar`, `homepage`) VALUE (?)";
-
-        // if(!req.body.captcha) {
-        //     return res.json({ message: "Captcha is undefined!" });
-        //
-        //     const CAPTCHA_KEY = process.env.CAPTCHA_KEY
-        //
-        //     const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${CAPTCHA_KEY}&response=${req.body.captcha}`;
-        //
-        //     req(verifyUrl, (err, res, body) => {
-        //         if (err) console.log(err)
-        //         body = JSON.parse(body);
-        //
-        //         if (!body.success || body.score < 0.4) {
-        //             return res.json({ message: "You might be a robot, sorry!! You are banned!", score: body.score })
-        //         }
-        //
-        //         return res.json({ message: "Captcha have been verified!", score: body.score })
-        //     })
-        // }
-
+        const q = "INSERT INTO users (`username`, `email`, `homepage`) VALUE (?)";
         const values = [
             req.body.username,
             req.body.email,
-            req.body.avatar,
             req.body.homepage
         ];
 
