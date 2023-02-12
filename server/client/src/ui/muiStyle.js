@@ -18,6 +18,8 @@ export const style = {
     bgcolor: 'white',
     top: '50%',
     left: '50%',
+    height: 'auto',
+    borderRadius: '8px',
     transform: 'translate(-50%, -50%)',
     boxShadow: 24,
 };

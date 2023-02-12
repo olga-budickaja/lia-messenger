@@ -22,14 +22,14 @@ const Messages = ({type}) => {
                     <Message type="main" />
                 </>
             </ContainerMessages>
-            <ButtonNew>
-                <Tooltip title="Add new theme">
-                    <IconButton onClick={() => setOpenWrite(true)}>
+            <ButtonNew onClick={() => setOpenWrite(true)}>
+                <IconButton>
+                    <Tooltip title="Add new theme">
                         <ColorButton>
                             <AddOutlined />
                         </ColorButton>
-                    </IconButton>
-                </Tooltip>
+                    </Tooltip>
+                </IconButton>
             </ButtonNew>
             <WriteMessageModal open={openWrite} setOpen={setOpenWrite}/>
         </>
