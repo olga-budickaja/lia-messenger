@@ -1,11 +1,11 @@
 import express from "express";
-import { getMess, addMess, getOneMess, deleteMess } from "../controllers/message.js";
+import { getMess, addMess, deleteMess, getConvMess } from "../controllers/message.js";
 
 const router = express.Router();
 
-router.post("/", addMess);
 router.get("/", getMess);
-router.get("/:id", getOneMess);
+router.get("/:conversationId", getConvMess);
 router.delete("/:id", deleteMess);
+router.post("/", addMess);
 
 export default router
