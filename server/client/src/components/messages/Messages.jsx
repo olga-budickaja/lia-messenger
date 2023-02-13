@@ -9,6 +9,7 @@ import { ColorRoundButton } from "../../ui/muiStyle";
 import { AddOutlined } from "@mui/icons-material";
 import { useQuery } from '@tanstack/react-query';
 import { publicRequest } from "../../requestMethod";
+import Message from "./Message";
 
 const Messages = ({type}) => {
     const [openWrite, setOpenWrite] = useState(false);
@@ -17,18 +18,29 @@ const Messages = ({type}) => {
     //         return res.data;
     //     })
     // );
-    // const { isLoading, error, data } = useQuery(['messages'], () =>
-    //     publicRequest.get("/messages").then(res => {
-    //         return res.data;
-    //     })
-    // );
+       const { isLoading, error, data } = useQuery(['messages'], () =>
+            publicRequest.get("/messages").then(res => {
+                return res.data;
+            })
+        );
 
-    // console.log(data)
+
+    console.log(data)
 
     return (
         <>
             <ContainerMessages>
                 <>
+                    {error
+                        ? "Something went wrong!"
+                        : isLoading
+                        ? "Loading..."
+                            : data.map((message) =>
+                                <Message message={message} key={message.id} type="main" />
+                            )
+                    }
+
+
                     {/*{dataMain.map(main_message => (*/}
                     {/*    <>*/}
                     {/*        <Message*/}
