@@ -4,10 +4,13 @@ import 'react-quill/dist/quill.snow.css';
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import RegisterForm from "../forms/RegisterForm";
+import LoginForm from "../forms/LoginForm";
 
 const WriteMessageModal = ({ open, setOpen }) => {
     const [value, setValue] = useState('');
-    const [token, setToken] = useState(false)
+    const [registration, setRegistration] = useState(false);
+    const [token, setToken] = useState(false);
+
     const modules = {
         toolbar: [
             ['bold', 'italic', 'link'], ['code-block'], ['image']
@@ -15,8 +18,6 @@ const WriteMessageModal = ({ open, setOpen }) => {
     }
 
     const formats = ['bold', 'italic', 'link', 'code-block', 'image'];
-
-    console.log(value)
 
     return (
         <Modal
@@ -26,8 +27,19 @@ const WriteMessageModal = ({ open, setOpen }) => {
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                {token
-                    ? (
+                {!token
+                    ? !registration
+                        ? (
+                            <Box sx={{ padding: '30px' }}>
+                                <RegisterForm setRegistration={setRegistration}/>
+                            </Box>
+                        )
+                        : (
+                            <Box sx={{ padding: '30px' }}>
+                                <LoginForm setToken={setToken}/>
+                            </Box>
+                        )
+                    : (
                         <Box sx={{ padding: '10px' }}>
                             <div className="text-editor">
                                 <ReactQuill
@@ -41,11 +53,8 @@ const WriteMessageModal = ({ open, setOpen }) => {
                             </div>
                         </Box>
                     )
-                    : (
-                        <Box sx={{ padding: '30px' }}>
-                            <RegisterForm setToken={setToken}/>
-                        </Box>
-                    )
+
+
                 }
 
             </Box>

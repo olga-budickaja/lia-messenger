@@ -2,6 +2,7 @@ import express from "express";
 import authRoots from "./routes/auth.js";
 import userRoots from "./routes/users.js";
 import messageRoots from "./routes/messages.js";
+import conversationRoots from "./routes/conversations.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoots);
 app.use("/api/users", userRoots);
+app.use("/api/conversations", conversationRoots);
 app.use("/api/messages", messageRoots);
 
 const PORT = process.env.PORT || 8800;

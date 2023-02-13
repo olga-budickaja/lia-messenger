@@ -21,3 +21,6 @@ export const Title = styled.h1`
   font-size: 3vmin;
 
 `;
+export const Name = styled.div`
+    font-size: 2vmin;
+`;

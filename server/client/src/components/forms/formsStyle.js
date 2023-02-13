@@ -7,17 +7,17 @@ export const Form = styled.form`
   flex-direction: column;
   gap: 10px;
 `;
+
+export const FormTitle = styled.h2`
+    text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+`;
 export const InputContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
-`;
-export const RequiredStar = styled.div`
-    position: absolute;
-  top: 0;
-  left: 0;
-  color: red;
 `;
 export const Input = styled.input`
   width: 100%;

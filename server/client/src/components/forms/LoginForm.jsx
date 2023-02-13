@@ -7,21 +7,19 @@ import {
     Input,
     InputContainer
 } from "./formsStyle";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { ColorButton } from "../../ui/muiStyle";
-import { Box, Button } from "@mui/material";
-import ReCAPTCHA from "react-google-recaptcha";
+import { Button } from "@mui/material";
 import { CSSTransition } from 'react-transition-group';
-import { publicRequest } from "../../requestMethod";
+import { AuthContext } from "../../context/AuthContext";
 
-const RegisterForm = ({setRegistration}) => {
-    const CAPTCHA_KEY = process.env.REACT_APP_CAPTCHA_KEY;
-    const [captchaIsGoogle, setCaptchaIsGoogle] = useState(false);
+const LoginForm = ({setToken}) => {
+    const { login } = useContext(AuthContext);
     const [errorAxios, setErrorAxios] = useState(null);
     const [inProp, setInProp] = useState(false);
     const successRef = useRef(null);
 
-    console.log(captchaIsGoogle)
+
 
     const {
         register,
@@ -35,27 +33,30 @@ const RegisterForm = ({setRegistration}) => {
         mode: "onBlur"
     });
 
-    const handleRegister = async (data) => {
+    const handleLogin = async (data) => {
+
         try {
-            await publicRequest.post('auth/register', data);
+            await login(data);
             setInProp(true);
             setTimeout(() => setInProp(false), 2000);
-            setTimeout(() => setRegistration(true), 2000);
-        } catch (e) {
+            setTimeout(() => {
+                setToken(true);
+            }, 2200);
+        }catch (e) {
             setErrorAxios(e.response.data.message);
             setInProp(false);
         }
-    }
+    };
 
 
     return (
         <Form>
-            <FormTitle>Registration</FormTitle>
+            <FormTitle>Log In</FormTitle>
             {inProp && (
                 <CSSTransition successRef={successRef} in={inProp} timeout={200} classNames="my-node">
                     <InputContainer ref={successRef}>
                         <Greeting>
-                            Successful registration :)
+                            Successful login :)
                         </Greeting>
                     </InputContainer>
                 </CSSTransition>
@@ -100,48 +101,18 @@ const RegisterForm = ({setRegistration}) => {
                     </ErrorText>
                 }
             </ErrorContainer>
-            <Input
-                placeholder="homepage"
-                type="url"
-                {...register('homepage', {
-                    required: false,
-                    pattern: {
-                        value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-                        message: "Invalid url"
-                    }
-                })}
-            />
-            <ErrorContainer>
-                {errors?.homepage &&
-                    <ErrorText>
-                        {errors?.homepage?.message ||
-                            "Error"
-                        }
-                    </ErrorText>
-                }
-            </ErrorContainer>
-
-            <Box>
-                <ReCAPTCHA
-                    sitekey={CAPTCHA_KEY}
-                    onChange={() => setCaptchaIsGoogle(true)}
-                />
-            </Box>
-
             <ColorButton
-                onClick={handleSubmit(handleRegister)}
+                onClick={handleSubmit(handleLogin)}
                 type="submit"
-                disabled={!isValid && !captchaIsGoogle}
+                disable={!isValid}
             >
-                Registration
+                Log in
                 {/*{isFetching*/}
                 {/*    ? <CircularProgress color="inherit" size="15px"/>*/}
                 {/*    : "Sign up"*/}
                 {/*}*/}
             </ColorButton>
-            <Button onClick={() => setRegistration(true)}>
-                I have account
-            </Button>
+            <Button>I haven`t account</Button>
             <ErrorContainer>
                 {errorAxios && (
                     <ErrorText>{errorAxios}</ErrorText>
@@ -151,4 +122,4 @@ const RegisterForm = ({setRegistration}) => {
     );
 };
 
-export default RegisterForm;
+export default LoginForm;

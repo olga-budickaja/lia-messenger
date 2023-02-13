@@ -37,9 +37,7 @@ export const login = (req, res) => {
 
         if (!username) return res.status(400).json({ message: "Wrong username!" });
 
-        const SECRET_KEY = process.env.MYSQL_KEY
-
-        const token = jwt.sign({ id: data[0].id }, SECRET_KEY);
+        const token = jwt.sign({ id: data[0].id }, process.env.JWT_KEY);
 
         const {...others} = data[0]
 
