@@ -22,11 +22,12 @@ export const addConversation = (req, res) => {
 };
 //get conv of a user
 export const getConvUser = (req, res) => {
-    const q = `SELECT m.*, u.id AS senderId, username FROM members AS m JOIN users AS u ON (u.id = m.senderId)`;
+    const q = `SELECT * FROM members WHERE senderId = ? OR receiverId = ?`;
+    const fetchId = req.params.userId;
 
-    db.query(q, (err, data) => {
+    db.query(q, [fetchId, fetchId], (err, data) => {
         if (err) return res.status(500).json(err);
 
-        return res.status(200).json(data)
+        return res.status(200).json(data);
     })
 }
