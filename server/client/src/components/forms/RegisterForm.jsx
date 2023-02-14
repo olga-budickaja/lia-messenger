@@ -21,8 +21,6 @@ const RegisterForm = ({setRegistration}) => {
     const [inProp, setInProp] = useState(false);
     const successRef = useRef(null);
 
-    console.log(captchaIsGoogle)
-
     const {
         register,
         formState: {

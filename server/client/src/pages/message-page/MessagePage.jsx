@@ -7,6 +7,7 @@ import Messages from "../../components/messages/Messages";
 const MessagePage = () => {
     const location = useLocation();
     const messageId = location.pathname.split("/")[2];
+
     const { isLoading, error, data } = useQuery(["themes"], () =>
         publicRequest.get(`/themes/${messageId}`).then((res) => {
             return res.data

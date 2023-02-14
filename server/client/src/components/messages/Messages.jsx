@@ -10,7 +10,7 @@ import { AddOutlined } from "@mui/icons-material";
 import Message from "./Message";
 
 
-const Messages = ({type, message }) => {
+const Messages = ({type, message, messageId }) => {
     const [openWrite, setOpenWrite] = useState(false);
     // const { isLoadingMain, errorMain, dataMain } = useQuery(['main_messages'], () =>
     //     publicRequest.get("/main_messages").then(res => {

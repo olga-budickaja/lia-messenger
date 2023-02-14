@@ -18,12 +18,32 @@ import {
     ZoomInOutlined
 } from "@mui/icons-material";
 import ImageZoom from "./ImageZoom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { publicRequest } from "../../requestMethod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AuthContext } from "../../context/AuthContext";
 
 const Message = ({type, message, setOpenWrite}) => {
     const [open, setOpen] = useState(false);
     const [openList, setOpenList] = useState(false);
+    const queryClient = useQueryClient();
+
+    const deleteMutation = useMutation(
+        (messageId) => {
+            return publicRequest.delete(`themes/${messageId}`)
+        },
+        {
+            onSuccess: (data) => {
+                queryClient.invalidateQueries(["themes"])
+                console.log(data)
+            }
+        }
+    );
+    const handleDelete = () => {
+        deleteMutation.mutate(message.id);
+    };
+
     return (
         <>
             <ContainerMessage type={type}>
@@ -60,7 +80,7 @@ const Message = ({type, message, setOpenWrite}) => {
                                 <ShortcutOutlined />
                             </Tooltip>
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={handleDelete}>
                             <Tooltip title="Delete message">
                                 <RemoveCircleOutlineOutlined sx={{ fill: "#e91e63" }}/>
                             </Tooltip>

@@ -30,7 +30,7 @@ export const deleteMess = (req, res) => {
         if (err) return res.status(403).json({ message: "Token is not valid!" });
 
         const messId = req.params.id;
-        const q = "DELETE FROM messages WERE `id` = ? AND `uid` = ? AND `memId` = ?"
+        const q = "DELETE FROM messages WHERE `id` = ? AND `uid` = ? AND `memId` = ?"
 
         db.query(q, [messId, userInfo.id], (err, data) => {
             if (err) return res.status(403).json({ message: "You can delete only your message!" });
