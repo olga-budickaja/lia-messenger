@@ -34,7 +34,6 @@ const LoginForm = ({setToken}) => {
     });
 
     const handleLogin = async (data) => {
-
         try {
             await login(data);
             setInProp(true);
