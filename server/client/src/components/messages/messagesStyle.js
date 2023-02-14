@@ -76,9 +76,7 @@ export const ImgMessage = styled.img`
   border-radius: 8px;
 `;
 export const ButtonDrop = styled.div`
-    position: absolute;
-    right: 0;
-    bottom: 15px;
+
 `;
 
 export const ButtonNew = styled.div`
