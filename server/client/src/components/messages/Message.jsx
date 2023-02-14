@@ -58,7 +58,7 @@ const Message = ({type, setOpenWrite}) => {
                 </ContainerDesc>
                 {type === "rcv" && (
                     <ButtonDrop onClick={() => setOpenList(true)}>
-                        <Button>See all...</Button>
+                        <Button>Write comments (3)</Button>
                     </ButtonDrop>
                 )}
             </ContainerMessage>

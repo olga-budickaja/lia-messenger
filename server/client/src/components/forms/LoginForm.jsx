@@ -104,7 +104,7 @@ const LoginForm = ({setToken}) => {
             <ColorButton
                 onClick={handleSubmit(handleLogin)}
                 type="submit"
-                disable={!isValid}
+                disable={!isValid.toString()}
             >
                 Log in
                 {/*{isFetching*/}

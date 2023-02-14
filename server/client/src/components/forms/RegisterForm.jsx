@@ -131,7 +131,7 @@ const RegisterForm = ({setRegistration}) => {
             <ColorButton
                 onClick={handleSubmit(handleRegister)}
                 type="submit"
-                disabled={!isValid && !captchaIsGoogle}
+                disabled={!isValid.toString() && !captchaIsGoogle.toString()}
             >
                 Registration
                 {/*{isFetching*/}

@@ -1,12 +1,10 @@
-import { Container, ContainerAnswer } from "./homeStyle";
-import Messages from '../../components/messages/Messages'
+import { Container } from "./homeStyle";
+import Themes from "../../components/themes/Themes";
 
 const Home = () => {
     return (
         <Container>
-            <ContainerAnswer>
-                <Messages />
-            </ContainerAnswer>
+            <Themes />
         </Container>
     );
 };

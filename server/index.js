@@ -1,6 +1,7 @@
 import express from "express";
 import authRoots from "./routes/auth.js";
 import userRoots from "./routes/users.js";
+import themeRoots from "./routes/themes.js";
 import messageRoots from "./routes/messages.js";
 import conversationRoots from "./routes/conversations.js";
 import cors from "cors";
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoots);
 app.use("/api/users", userRoots);
+app.use("/api/themes", themeRoots);
 app.use("/api/conversations", conversationRoots);
 app.use("/api/messages", messageRoots);
 
