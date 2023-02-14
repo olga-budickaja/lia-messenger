@@ -9,6 +9,7 @@ import { ColorRoundButton } from "../../ui/muiStyle";
 import { AddOutlined } from "@mui/icons-material";
 import Message from "./Message";
 
+
 const Messages = ({type, message }) => {
     const [openWrite, setOpenWrite] = useState(false);
     // const { isLoadingMain, errorMain, dataMain } = useQuery(['main_messages'], () =>
@@ -36,26 +37,6 @@ const Messages = ({type, message }) => {
                     {/*        )*/}
                     {/*}*/}
 
-
-                    {/*{dataMain.map(main_message => (*/}
-                    {/*    <>*/}
-                    {/*        <Message*/}
-                    {/*            type="rcv"*/}
-                    {/*            setOpenWrite={setOpenWrite}*/}
-                    {/*            message={main_message}*/}
-                    {/*        />*/}
-                    {/*        {data.map(message => (*/}
-                    {/*            message.mid === main_message.id && (*/}
-                    {/*            <Message type={*/}
-                    {/*                message.uid === message.mid*/}
-                    {/*                    ? "main"*/}
-                    {/*                    : "snd"*/}
-                    {/*            }/>*/}
-                    {/*        )*/}
-                    {/*        ))}*/}
-                    {/*    </>*/}
-
-                    {/*))}*/}
                 </>
             </ContainerMessages>
             <ButtonNew onClick={() => setOpenWrite(true)}>

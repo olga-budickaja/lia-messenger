@@ -25,7 +25,6 @@ const LoginForm = ({setToken}) => {
         register,
         formState: {
             errors,
-            isValid
         },
         handleSubmit,
     }
@@ -103,13 +102,8 @@ const LoginForm = ({setToken}) => {
             <ColorButton
                 onClick={handleSubmit(handleLogin)}
                 type="submit"
-                disable={!isValid.toString()}
             >
                 Log in
-                {/*{isFetching*/}
-                {/*    ? <CircularProgress color="inherit" size="15px"/>*/}
-                {/*    : "Sign up"*/}
-                {/*}*/}
             </ColorButton>
             <Button>I haven`t account</Button>
             <ErrorContainer>

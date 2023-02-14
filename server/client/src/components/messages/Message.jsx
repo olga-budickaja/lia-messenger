@@ -19,6 +19,7 @@ import {
 } from "@mui/icons-material";
 import ImageZoom from "./ImageZoom";
 import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const Message = ({type, message, setOpenWrite}) => {
     const [open, setOpen] = useState(false);
@@ -26,42 +27,46 @@ const Message = ({type, message, setOpenWrite}) => {
     return (
         <>
             <ContainerMessage type={type}>
-                <ContainerTitle type={type} elevation={0}>
-                    {type === "main"
-                        ? (<Image src={avatar1} />)
-                        : (<Image src={avatar2} />)
-                    }
+                    <ContainerTitle type={type} elevation={0}>
+                        {type === "main"
+                            ? (<Image src={avatar1} />)
+                            : (<Image src={avatar2} />)
+                        }
 
-                    <h6>{message.username}</h6>
-                    <Span>22.05.2023 in 10:31</Span>
-                    <Box sx={{ flexGrow: 1 }} />
-                    {type === "rcv" && (
+                        <h6>{message.username}</h6>
+                        <Span>22.05.2023 in 10:31</Span>
+                        <Box sx={{ flexGrow: 1 }} />
+                        {type === "rcv" && (
+                            <IconButton
+                                onClick={() => setOpenList(true)}
+                            >
+                                <Tooltip title="Write comments">
+                                    <Badge badgeContent={4} color="success">
+                                        <QuestionAnswerOutlined />
+                                    </Badge>
+                                </Tooltip>
+                            </IconButton>
+                        )}
                         <IconButton
-                            onClick={() => setOpenList(true)}
+                            component={RouterLink}
+                            to={`message/${message.id}`}
                         >
-                            <Tooltip title="Write comments">
-                                <Badge badgeContent={4} color="success">
-                                    <QuestionAnswerOutlined />
-                                </Badge>
+                            <Tooltip title="See all theme">
+                                <VisibilityOutlined />
                             </Tooltip>
                         </IconButton>
-                    )}
-                    <IconButton>
-                        <Tooltip title="See all theme">
-                            <VisibilityOutlined />
-                        </Tooltip>
-                    </IconButton>
-                    <IconButton onClick={() => setOpenWrite(true)}>
-                        <Tooltip title="Answer">
-                            <ShortcutOutlined />
-                        </Tooltip>
-                    </IconButton>
-                    <IconButton>
-                        <Tooltip title="Delete message">
-                            <RemoveCircleOutlineOutlined sx={{ fill: "#e91e63" }}/>
-                        </Tooltip>
-                    </IconButton>
-                </ContainerTitle>
+                        <IconButton onClick={() => setOpenWrite(true)}>
+                            <Tooltip title="Answer">
+                                <ShortcutOutlined />
+                            </Tooltip>
+                        </IconButton>
+                        <IconButton>
+                            <Tooltip title="Delete message">
+                                <RemoveCircleOutlineOutlined sx={{ fill: "#e91e63" }}/>
+                            </Tooltip>
+                        </IconButton>
+                    </ContainerTitle>
+
                 <ContainerDesc type={type}>
                     {message?.picture && (
                         <ContainerImg>
