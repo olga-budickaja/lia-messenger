@@ -132,10 +132,6 @@ const RegisterForm = ({setRegistration}) => {
                 disabled={!isValid.toString() && !captchaIsGoogle.toString()}
             >
                 Registration
-                {/*{isFetching*/}
-                {/*    ? <CircularProgress color="inherit" size="15px"/>*/}
-                {/*    : "Sign up"*/}
-                {/*}*/}
             </ColorButton>
             <Button onClick={() => setRegistration(true)}>
                 I have account

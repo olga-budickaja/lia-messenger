@@ -13,7 +13,7 @@ import { Button } from "@mui/material";
 import { CSSTransition } from 'react-transition-group';
 import { AuthContext } from "../../context/AuthContext";
 
-const LoginForm = ({setToken}) => {
+const LoginForm = () => {
     const { login } = useContext(AuthContext);
     const [errorAxios, setErrorAxios] = useState(null);
     const [inProp, setInProp] = useState(false);
@@ -24,7 +24,7 @@ const LoginForm = ({setToken}) => {
     const {
         register,
         formState: {
-            errors,
+            errors
         },
         handleSubmit,
     }
@@ -33,13 +33,11 @@ const LoginForm = ({setToken}) => {
     });
 
     const handleLogin = async (data) => {
+
         try {
             await login(data);
             setInProp(true);
             setTimeout(() => setInProp(false), 2000);
-            setTimeout(() => {
-                setToken(true);
-            }, 2200);
         }catch (e) {
             setErrorAxios(e.response.data.message);
             setInProp(false);

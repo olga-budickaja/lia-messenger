@@ -4,3 +4,4 @@ export const addUser = (req, res) => {
 export const getUser = (req, res) => {
     res.json("some")
 }
+//get conv of user

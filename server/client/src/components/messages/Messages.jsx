@@ -1,44 +1,45 @@
 import {
-    ButtonNew,
+    ButtonNew, ContainerMessage,
     ContainerMessages,
 } from "./messagesStyle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WriteMessageModal from "../write-message-modal/WriteMessageModal";
 import { Tooltip } from "@mui/material";
 import { ColorRoundButton } from "../../ui/muiStyle";
 import { AddOutlined } from "@mui/icons-material";
 import Message from "./Message";
+import { publicRequest } from "../../requestMethod";
+import { type } from "@testing-library/user-event/dist/type";
 
 
-const Messages = ({type, message, messageId }) => {
+const Messages = ({ message }) => {
     const [openWrite, setOpenWrite] = useState(false);
-    // const { isLoadingMain, errorMain, dataMain } = useQuery(['main_messages'], () =>
-    //     publicRequest.get("/main_messages").then(res => {
-    //         return res.data;
-    //     })
-    // );
-    //    const { isLoading, error, data } = useQuery(['messages'], () =>
-    //         publicRequest.get("/messages").then(res => {
-    //             return res.data;
-    //         })
-    //     );
+    const [childrenMessages, setChildrenMessages] = useState([]);
+
+    const messageId = message.id;
+
+    useEffect(() => {
+        try {
+            const fetchChildrenMessage = async () => {
+                const res = await publicRequest.get(`/messages/theme/${messageId}`);
+                setChildrenMessages(res.data);
+            }
+            fetchChildrenMessage();
+        } catch (e) {
+            console.log(e);
+        }
+    }, [messageId]);
 
     return (
         <>
             <ContainerMessages>
-                <Message type={type} message={message}/>
-                <>
-                    {/*{error*/}
-                    {/*    ? "Something went wrong!"*/}
-                    {/*    : isLoading*/}
-                    {/*    ? "Loading..."*/}
-                    {/*        : data.map((message) =>*/}
-                    {/*            <Message message={message} key={message.id} type="main" />*/}
-                    {/*        )*/}
-                    {/*}*/}
-
-                </>
+                <Message type="rcv" message={message}/>
             </ContainerMessages>
+            <ContainerMessage>
+                {childrenMessages.map(child => (
+                    <Message type={type} message={child} key={child.id} />
+                ))}
+            </ContainerMessage>
             <ButtonNew onClick={() => setOpenWrite(true)}>
                 <Tooltip title="Add new theme">
                     <ColorRoundButton>

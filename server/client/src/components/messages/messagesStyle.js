@@ -32,15 +32,13 @@ export const ContainerMessage = styled.div`
   }
 `;
 export const ContainerTitle = styled.div`
+  position: relative;
     display: flex;
     align-items: center;
     padding: 10px 30px;
   border-radius: 12px;
     gap: 20px;
-    background: ${(props) => props.type === "main" ? cyan[50] : yellow[50]};
-  &:first-of-type {
-    background: ${(props) => props.type === "rcv" && cyan[50]};
-  }
+    background: ${(props) => props.type === "rcv" ? yellow[50] : cyan[50]};
 `;
 export const Image = styled.img`
     width: 48px;

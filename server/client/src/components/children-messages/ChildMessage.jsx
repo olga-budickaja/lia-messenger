@@ -1,12 +1,13 @@
+import { useState } from 'react';
 import {
     ContainerDesc,
-    ContainerImg, ContainerMessage,
-    ContainerOpenImage, ContainerText,
+    ContainerImg,
+    ContainerMessage, ContainerOpenImage, ContainerText,
     ContainerTitle,
     Image,
     ImgMessage,
     Span
-} from "./messagesStyle";
+} from "../messages/messagesStyle";
 import avatar1 from "../../assets/avatar1.png";
 import avatar2 from "../../assets/avatar2.png";
 import { Badge, Box, IconButton, Tooltip } from "@mui/material";
@@ -14,80 +15,42 @@ import {
     QuestionAnswerOutlined,
     RemoveCircleOutlineOutlined,
     ShortcutOutlined,
-    VisibilityOutlined,
-    ZoomInOutlined
+    VisibilityOutlined, ZoomInOutlined
 } from "@mui/icons-material";
-import ImageZoom from "./ImageZoom";
-import { useContext, useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { publicRequest } from "../../requestMethod";
+import ImageZoom from "../messages/ImageZoom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { publicRequest } from "../../requestMethod";
 
-const Message = ({type, message, setOpenWrite}) => {
+const ChildMessage = ({child, type, setOpenWrite}) => {
     const [open, setOpen] = useState(false);
     const [openList, setOpenList] = useState(false);
     const queryClient = useQueryClient();
-    const [conversations, setConversations] = useState([]);
-
-    const userId = message.uid;
-
-    useEffect(() => {
-
-        try {
-            const fetchChildrenMessage = async () => {
-                const res = await publicRequest.get(`/conversations/${userId}`);
-                setConversations(res.data);
-            }
-            fetchChildrenMessage()
-        } catch (e) {
-            console.log(e)
-        }
-
-    }, [userId]);
-
 
     const deleteMutation = useMutation(
         (messageId) => {
-             if (type === "rcv" ) {
-                 return publicRequest.delete(`themes/${messageId}`)
-             } else {
-                 return publicRequest.delete(`messages/${messageId}`)
-             }
+            return publicRequest.delete(`themes/${messageId}`)
         },
         {
-            onSuccess: () => {
-                if (type === "rcv") {
-
-                } else {
-                    queryClient.invalidateQueries(["messages"])
-                }
+            onSuccess: (data) => {
+                queryClient.invalidateQueries(["themes"])
+                console.log(data)
             }
         }
     );
     const handleDelete = () => {
-        deleteMutation.mutate(message.id);
+        deleteMutation.mutate(child.id);
     };
-
     return (
         <>
-            <ContainerMessage
-                type={type
-                ? (conversations.find(m => m.id === message.memId && m.senderId !== message.uid && m.receiverId === message.uid)) && "rcv"
-                : "snd"
-            }>
-                <ContainerTitle
-                    type={type
-                        ? (conversations.find(m => m.id === message.memId && m.senderId !== message.uid && m.receiverId === message.uid)) && "rcv"
-                        : "snd"
-                    }
-                    elevation={0}
-                >
-                    {type !== "rcv"
+            <ContainerMessage type={type}>
+                <ContainerTitle type={type} elevation={0}>
+                    {type === "main"
                         ? (<Image src={avatar1} />)
                         : (<Image src={avatar2} />)
                     }
 
-                    <h6>{message.username}</h6>
+                    <h6>{child.username}</h6>
                     <Span>22.05.2023 in 10:31</Span>
                     <Box sx={{ flexGrow: 1 }} />
                     {type === "rcv" && (
@@ -103,7 +66,7 @@ const Message = ({type, message, setOpenWrite}) => {
                     )}
                     <IconButton
                         component={RouterLink}
-                        to={`message/${message.id}`}
+                        to={`message/${child.id}`}
                     >
                         <Tooltip title="See all theme">
                             <VisibilityOutlined />
@@ -121,17 +84,17 @@ const Message = ({type, message, setOpenWrite}) => {
                     </IconButton>
                 </ContainerTitle>
 
-                <ContainerDesc>
-                    {message?.picture && (
+                <ContainerDesc type={type}>
+                    {child?.picture && (
                         <ContainerImg>
-                            <ImgMessage src={message.picture}/>
+                            <ImgMessage src={child.picture}/>
                             <ContainerOpenImage>
                                 <IconButton onClick={() => setOpen(true)}>
                                     <ZoomInOutlined/>
                                 </IconButton>
                                 <ImageZoom
                                     open={open}
-                                    img={message.picture}
+                                    img={child.picture}
                                     onClick={() => setOpen(false)}
                                     setOpen={setOpen}
                                 />
@@ -139,7 +102,7 @@ const Message = ({type, message, setOpenWrite}) => {
                         </ContainerImg>
                     )}
                     <ContainerText>
-                        {message.desc}
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At aut autem blanditiis delectus deleniti eos ex facere ipsa laudantium molestias numquam, quia, quod quos reiciendis saepe, vel vero voluptatem voluptatibus.
                     </ContainerText>
                 </ContainerDesc>
             </ContainerMessage>
@@ -147,4 +110,4 @@ const Message = ({type, message, setOpenWrite}) => {
     );
 };
 
-export default Message;
+export default ChildMessage;

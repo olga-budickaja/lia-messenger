@@ -1,6 +1,8 @@
 import { db } from "../db.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
+dotenv.config();
 
 //add
 
@@ -12,6 +14,15 @@ export const getMess = (req, res) => {
             return res.status(200).json(data);
         });
 };
+export const getThemeMess = (req, res) => {
+   const q = "SELECT m.*, u.id AS uid, username  FROM users u JOIN messages m JOIN themes t  ON (m.uid = u.id) AND (t.userId = u.id) WHERE m.themeId = ?";
+
+   db.query(q, [req.params.id], (err, data) => {
+       if (err) return res.status(500).json(err);
+
+       return res.status(200).json(data)
+   });
+}
 export const getConvMess = (req, res) => {
    const q = "SELECT `username`, `desc`, `picture`, `file`, `uid` FROM users u JOIN members c JOIN messages m ON (m.uid = u.id) AND (c.senderId = u.id) OR (c.receiverId = u.id) WHERE c.id = ?";
 
@@ -29,10 +40,9 @@ export const deleteMess = (req, res) => {
     jwt.verify(token, process.env.JWT_KEY, (err, userInfo) => {
         if (err) return res.status(403).json({ message: "Token is not valid!" });
 
-        const messId = req.params.id;
-        const q = "DELETE FROM messages WHERE `id` = ? AND `uid` = ? AND `memId` = ?"
+        const q = "DELETE FROM messages WHERE `id` = ? AND `uid` = ?"
 
-        db.query(q, [messId, userInfo.id], (err, data) => {
+        db.query(q, [req.params.id, userInfo.id], (err, data) => {
             if (err) return res.status(403).json({ message: "You can delete only your message!" });
 
             return res.status(200).json("Message has been deleted.")

@@ -1,15 +1,16 @@
 import { Box, Modal } from "@mui/material";
 import { style } from "../../ui/muiStyle";
 import 'react-quill/dist/quill.snow.css';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ReactQuill from "react-quill";
 import RegisterForm from "../forms/RegisterForm";
 import LoginForm from "../forms/LoginForm";
+import { AuthContext } from "../../context/AuthContext";
 
 const WriteMessageModal = ({ open, setOpen }) => {
+    const { currentUser } = useContext(AuthContext);
     const [value, setValue] = useState('');
     const [registration, setRegistration] = useState(false);
-    const [token, setToken] = useState(false);
 
     const modules = {
         toolbar: [
@@ -27,7 +28,7 @@ const WriteMessageModal = ({ open, setOpen }) => {
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                {!token
+                {currentUser === null
                     ? !registration
                         ? (
                             <Box sx={{ padding: '30px' }}>
@@ -36,7 +37,7 @@ const WriteMessageModal = ({ open, setOpen }) => {
                         )
                         : (
                             <Box sx={{ padding: '30px' }}>
-                                <LoginForm setToken={setToken}/>
+                                <LoginForm />
                             </Box>
                         )
                     : (
@@ -53,8 +54,6 @@ const WriteMessageModal = ({ open, setOpen }) => {
                             </div>
                         </Box>
                     )
-
-
                 }
 
             </Box>

@@ -17,6 +17,7 @@ export const AuthContextProvider = ({ children }) => {
         await publicRequest.post("auth/logout");
         setCurrentUser(null)
     }
+
     useEffect(() => {
         localStorage.setItem("user", JSON.stringify(currentUser));
     }, [currentUser]);
