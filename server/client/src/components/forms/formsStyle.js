@@ -13,6 +13,10 @@ export const FormTitle = styled.h2`
   text-transform: uppercase;
   margin-bottom: 20px;
 `;
+export const FormSubtitle = styled.h2`
+    text-align: center;
+  text-transform: uppercase;
+`;
 export const InputContainer = styled.div`
   position: relative;
   display: flex;
@@ -24,6 +28,14 @@ export const Input = styled.input`
   padding: 10px;
   border: 1px solid grey;
   border-radius: 5px;
+`;
+export const InputShow = styled.div`
+  position: absolute;
+  top: 0;
+  right: 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
 `;
 export const ErrorContainer = styled.div`
 

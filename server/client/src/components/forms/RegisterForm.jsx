@@ -5,7 +5,7 @@ import {
     Form, FormTitle,
     Greeting,
     Input,
-    InputContainer
+    InputContainer, InputShow
 } from "./formsStyle";
 import { useRef, useState } from "react";
 import { ColorButton } from "../../ui/muiStyle";
@@ -13,6 +13,8 @@ import { Box, Button } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { CSSTransition } from 'react-transition-group';
 import { publicRequest } from "../../requestMethod";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
+
 
 const RegisterForm = ({setRegistration}) => {
     const CAPTCHA_KEY = process.env.REACT_APP_CAPTCHA_KEY;
@@ -20,6 +22,9 @@ const RegisterForm = ({setRegistration}) => {
     const [errorAxios, setErrorAxios] = useState(null);
     const [inProp, setInProp] = useState(false);
     const successRef = useRef(null);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const {
         register,
@@ -98,6 +103,28 @@ const RegisterForm = ({setRegistration}) => {
                     </ErrorText>
                 }
             </ErrorContainer>
+            <InputContainer>
+                <Input
+                    placeholder="password*"
+                    type={showPassword ? 'text' : 'password'}
+                    {...register('password', {
+                        required: "field is required",
+                    })}
+                />
+                <InputShow onClick={handleClickShowPassword}>
+                    {!showPassword ? <VisibilityOffOutlined /> : <VisibilityOutlined />}
+                </InputShow>
+            </InputContainer>
+
+            <ErrorContainer>
+                {errors?.password &&
+                    <ErrorText>
+                        {errors?.password?.message ||
+                            "Error"
+                        }
+                    </ErrorText>
+                }
+            </ErrorContainer>
             <Input
                 placeholder="homepage"
                 type="url"
@@ -125,14 +152,15 @@ const RegisterForm = ({setRegistration}) => {
                     onChange={() => setCaptchaIsGoogle(true)}
                 />
             </Box>
-
-            <ColorButton
-                onClick={handleSubmit(handleRegister)}
-                type="submit"
-                disabled={!isValid.toString() && !captchaIsGoogle.toString()}
-            >
-                Registration
-            </ColorButton>
+            <Box sx={{ m: 2 }}>
+                <ColorButton
+                    onClick={handleSubmit(handleRegister)}
+                    type="submit"
+                    disabled={!isValid.toString() && !captchaIsGoogle.toString()}
+                >
+                    Registration
+                </ColorButton>
+            </Box>
             <Button onClick={() => setRegistration(true)}>
                 I have account
             </Button>

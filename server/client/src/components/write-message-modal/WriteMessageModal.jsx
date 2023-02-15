@@ -2,23 +2,15 @@ import { Box, Modal } from "@mui/material";
 import { style } from "../../ui/muiStyle";
 import 'react-quill/dist/quill.snow.css';
 import { useContext, useState } from "react";
-import ReactQuill from "react-quill";
 import RegisterForm from "../forms/RegisterForm";
 import LoginForm from "../forms/LoginForm";
 import { AuthContext } from "../../context/AuthContext";
+import WriteMessage from "./WriteMessage";
 
 const WriteMessageModal = ({ open, setOpen }) => {
     const { currentUser } = useContext(AuthContext);
-    const [value, setValue] = useState('');
     const [registration, setRegistration] = useState(false);
 
-    const modules = {
-        toolbar: [
-            ['bold', 'italic', 'link'], ['code-block'], ['image']
-        ]
-    }
-
-    const formats = ['bold', 'italic', 'link', 'code-block', 'image'];
 
     return (
         <Modal
@@ -41,18 +33,9 @@ const WriteMessageModal = ({ open, setOpen }) => {
                             </Box>
                         )
                     : (
-                        <Box sx={{ padding: '10px' }}>
-                            <div className="text-editor">
-                                <ReactQuill
-                                    theme="snow"
-                                    value={value}
-                                    onChange={setValue}
-                                    placeholder={"Write something awesome..."}
-                                    modules={modules}
-                                    formats={formats}
-                                />
-                            </div>
-                        </Box>
+                        <>
+                            <WriteMessage setOpen={setOpen}/>
+                        </>
                     )
                 }
 

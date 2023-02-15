@@ -18,7 +18,7 @@ import {
     ZoomInOutlined
 } from "@mui/icons-material";
 import ImageZoom from "./ImageZoom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { publicRequest } from "../../requestMethod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -67,6 +67,10 @@ const Message = ({type, message, setOpenWrite}) => {
     const handleDelete = () => {
         deleteMutation.mutate(message.id);
     };
+    const getText = (html) => {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        return doc.body.textContent
+    }
 
     return (
         <>
@@ -122,16 +126,16 @@ const Message = ({type, message, setOpenWrite}) => {
                 </ContainerTitle>
 
                 <ContainerDesc>
-                    {message?.picture && (
+                    {message?.fileImg && (
                         <ContainerImg>
-                            <ImgMessage src={message.picture}/>
+                            <ImgMessage src={message.fileImg}/>
                             <ContainerOpenImage>
                                 <IconButton onClick={() => setOpen(true)}>
                                     <ZoomInOutlined/>
                                 </IconButton>
                                 <ImageZoom
                                     open={open}
-                                    img={message.picture}
+                                    img={message.fileImg}
                                     onClick={() => setOpen(false)}
                                     setOpen={setOpen}
                                 />
@@ -139,7 +143,7 @@ const Message = ({type, message, setOpenWrite}) => {
                         </ContainerImg>
                     )}
                     <ContainerText>
-                        {message.desc}
+                        {getText(message.desc)}
                     </ContainerText>
                 </ContainerDesc>
             </ContainerMessage>

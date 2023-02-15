@@ -76,9 +76,11 @@ const Navbar = () => {
                         <Link to="/">
                             <LogoContainer>
                                 <Logo src={logo} alt="logo"/>
-                                <Title>
-                                    Lia<Span>Messenger</Span>
-                                </Title>
+                                <Box  sx={{ display: { xs: 'none', md: 'flex' } }}>
+                                    <Title>
+                                        Lia<Span>Messenger</Span>
+                                    </Title>
+                                </Box>
                             </LogoContainer>
                         </Link>
                         <Search>
@@ -91,7 +93,7 @@ const Navbar = () => {
                             />
                         </Search>
                         <Box sx={{ flexGrow: 1 }} />
-                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <Box>
                             {currentUser === null
                                 ? (
                                     <IconButton

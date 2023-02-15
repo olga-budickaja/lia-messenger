@@ -35,5 +35,29 @@ export const deleteTheme = (req, res) => {
 }
 
 export const addTheme = (req, res) => {
+    const token = req.cookies.access_token
+
+    if(!token) return res.status(401).json({ message: "Not authenticated!" });
+
+    jwt.verify(token, process.env.JWT_KEY, (err, userInfo) => {
+        if ( err ) return res.status(403).json({ message: "Token is not valid!" });
+
+        const q = "INSERT INTO themes (`desc`, `fileImg`, `userId`, `fileTxt`, `homepage`, `createAt`) VALUES (?)";
+
+        const values = [
+            req.body.desc,
+            req.body.fileImg,
+            userInfo.id,
+            req.body.fileTxt,
+            req.body.homepage,
+            req.body.createAt
+        ]
+
+        db.query(q, [values], (err, data) => {
+            if (err) return res.status(500).json(err);
+
+            return res.status(200).json({ message: "Theme has been created." });
+        })
+    });
 
 }

@@ -5,21 +5,23 @@ import {
     Form, FormTitle,
     Greeting,
     Input,
-    InputContainer
+    InputContainer, InputShow
 } from "./formsStyle";
 import { useContext, useRef, useState } from "react";
 import { ColorButton } from "../../ui/muiStyle";
 import { Button } from "@mui/material";
 import { CSSTransition } from 'react-transition-group';
 import { AuthContext } from "../../context/AuthContext";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 
 const LoginForm = () => {
     const { login } = useContext(AuthContext);
     const [errorAxios, setErrorAxios] = useState(null);
     const [inProp, setInProp] = useState(false);
     const successRef = useRef(null);
+    const [showPassword, setShowPassword] = useState(false);
 
-
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const {
         register,
@@ -77,21 +79,23 @@ const LoginForm = () => {
                     </ErrorText>
                 }
             </ErrorContainer>
-            <Input
-                placeholder="email*"
-                type="email"
-                {...register('email', {
-                    required: "field is required",
-                    pattern: {
-                        value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                        message: "Invalid email"
-                    }
-                })}
-            />
+            <InputContainer>
+                <Input
+                    placeholder="password"
+                    type={showPassword ? 'text' : 'password'}
+                    {...register('password', {
+                        required: "field is required",
+                    })}
+                />
+                <InputShow onClick={handleClickShowPassword}>
+                    {!showPassword ? <VisibilityOffOutlined /> : <VisibilityOutlined />}
+                </InputShow>
+            </InputContainer>
+
             <ErrorContainer>
-                {errors?.email &&
+                {errors?.password &&
                     <ErrorText>
-                        {errors?.email?.message ||
+                        {errors?.password?.message ||
                             "Error"
                         }
                     </ErrorText>

@@ -1,5 +1,5 @@
 import { Button, styled } from "@mui/material";
-import { pink } from "@mui/material/colors";
+import { cyan, pink } from "@mui/material/colors";
 
 export const ColorRoundButton = styled(Button)(({ theme }) => ({
     color: 'white',
@@ -10,6 +10,17 @@ export const ColorRoundButton = styled(Button)(({ theme }) => ({
     padding: 0,
     '&:hover': {
         backgroundColor: pink[600],
+    },
+}));
+export const ColorRoundButtonGoogle = styled(Button)(({ theme }) => ({
+    color: 'white',
+    backgroundColor: cyan[500],
+    borderRadius: '100%',
+    minWidth: 50,
+    minHeight: 50,
+    padding: 0,
+    '&:hover': {
+        backgroundColor: cyan[600],
     },
 }));
 export const ColorButton = styled(Button)(({ theme }) => ({
