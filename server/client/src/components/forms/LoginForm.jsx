@@ -13,6 +13,8 @@ import { Button } from "@mui/material";
 import { CSSTransition } from 'react-transition-group';
 import { AuthContext } from "../../context/AuthContext";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 const LoginForm = () => {
     const { login } = useContext(AuthContext);
@@ -20,6 +22,7 @@ const LoginForm = () => {
     const [inProp, setInProp] = useState(false);
     const successRef = useRef(null);
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -40,6 +43,7 @@ const LoginForm = () => {
             await login(data);
             setInProp(true);
             setTimeout(() => setInProp(false), 2000);
+            setTimeout(() => navigate("/write"), 2000);
         }catch (e) {
             setErrorAxios(e.response.data.message);
             setInProp(false);
@@ -107,7 +111,12 @@ const LoginForm = () => {
             >
                 Log in
             </ColorButton>
-            <Button>I haven`t account</Button>
+            <Button
+                component={RouterLink}
+                to="/register"
+            >
+                I haven`t account
+            </Button>
             <ErrorContainer>
                 {errorAxios && (
                     <ErrorText>{errorAxios}</ErrorText>

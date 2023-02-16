@@ -34,6 +34,7 @@ export const ContainerMessage = styled.div`
 export const ContainerTitle = styled.div`
   position: relative;
     display: flex;
+  flex-wrap: wrap;
     align-items: center;
     padding: 10px 30px;
   border-radius: 12px;

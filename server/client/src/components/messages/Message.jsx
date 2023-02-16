@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { publicRequest } from "../../requestMethod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import moment from "moment";
 
 const Message = ({type, message, setOpenWrite}) => {
     const [open, setOpen] = useState(false);
@@ -34,11 +35,11 @@ const Message = ({type, message, setOpenWrite}) => {
     useEffect(() => {
 
         try {
-            const fetchChildrenMessage = async () => {
+            const fetchConversations = async () => {
                 const res = await publicRequest.get(`/conversations/${userId}`);
                 setConversations(res.data);
             }
-            fetchChildrenMessage()
+            fetchConversations()
         } catch (e) {
             console.log(e)
         }
@@ -72,6 +73,12 @@ const Message = ({type, message, setOpenWrite}) => {
         return doc.body.textContent
     }
 
+    const parseDate = (createDate) => {
+        const date = moment(createDate).format("DD MM YYYY");
+        const time = moment(createDate).format("hh:mm:ss")
+        return `${date} in ${time}`
+    }
+
     return (
         <>
             <ContainerMessage
@@ -92,7 +99,7 @@ const Message = ({type, message, setOpenWrite}) => {
                     }
 
                     <h6>{message.username}</h6>
-                    <Span>22.05.2023 in 10:31</Span>
+                    <Span>{parseDate(message.createAt)}</Span>
                     <Box sx={{ flexGrow: 1 }} />
                     {type === "rcv" && (
                         <IconButton

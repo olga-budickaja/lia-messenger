@@ -22,6 +22,7 @@ export const Qualification = styled.span`
   font-size: 12px;
 `;
 export const Input = styled.input`
+  position: relative;
   width: 100%;
   border: 1px solid lightgrey;
   padding: 10px 20px;
@@ -30,4 +31,12 @@ export const Input = styled.input`
 export const ContainerButton = styled.div`
   display: flex;
   justify-content: center;
+`;
+export const ErrorContainer = styled.div`
+
+`;
+export const ErrorText = styled.span`
+ color: red;
+ font-size: 12px;
+ font-weight: 600;
 `;

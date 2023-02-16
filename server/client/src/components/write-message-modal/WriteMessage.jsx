@@ -1,4 +1,13 @@
-import { Container, Title, Input, ContainerButton, Label, Qualification } from "./writteMessageStyle";
+import {
+    Container,
+    Title,
+    Input,
+    ContainerButton,
+    Label,
+    Qualification,
+    ErrorContainer,
+    ErrorText
+} from "./writteMessageStyle";
 import ReactQuill from "react-quill";
 import { useEffect, useState } from "react";
 import { ColorButton } from "../../ui/muiStyle";
@@ -6,6 +15,8 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import app from "../../firebase";
 import { publicRequest } from "../../requestMethod";
 import moment from "moment";
+import Resizer from "react-image-file-resizer";
+
 const WriteMessage = ({ setOpen }) => {
     const [value, setValue] = useState('');
     const [img, setImg] = useState(undefined);
@@ -14,6 +25,7 @@ const WriteMessage = ({ setOpen }) => {
     const [txtPrc, setTxtPrc] = useState(0);
     const [inputs, setInputs] = useState({});
     const [homepage, setHomepage] = useState('');
+    const [errorSize, setErrorSize] = useState('');
 
     const modules = {
         toolbar: [
@@ -22,12 +34,33 @@ const WriteMessage = ({ setOpen }) => {
     }
     const formats = ['bold', 'italic', 'link', 'code-block'];
 
+    const resizeFile = (file) =>
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                file,
+                320,
+                240,
+                "JPEG",
+                100,
+                0,
+                (uri) => {
+                    resolve(uri);
+                },
+                "base64"
+            );
+        });
 
     const uploadFile = (file, fileType) => {
         const storage = getStorage(app);
         const fileName = new Date().getTime() + file.name;
         const storageRef = ref(storage, fileName);
-        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        const uploadTask = uploadBytesResumable(storageRef, file)
+
+        // filetype === "fileImg"
+        //     ? const uploadTask =
+        //     : const uploadTask = uploadBytesResumable(storageRef, file);
+
 
         uploadTask.on('state_changed',
             (snapshot) => {
@@ -58,24 +91,29 @@ const WriteMessage = ({ setOpen }) => {
     };
 
     useEffect(() => {
-        img && uploadFile(img, "fileImg")
-    }, [img]);
-
-    useEffect(() => {
-        txt && uploadFile(txt, "fileTxt")
+        txt && txt > 100 * 1024
+            ? setErrorSize("large file size")
+            : setErrorSize("") && console.log(txt)
     }, [txt]);
 
+    useEffect(() => {
+        const sendImg = async () => {
+            try {
+                if (img) {
+                    await resizeFile(img)
+                    console.log(img)
+                    // uploadFile(img, "fileImg")
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        sendImg();
+    }, [img]);
 
     const handleUpload = async (e) => {
         e.preventDefault();
 
-        // setInputs((prev) => {
-        //     return {
-        //         ...prev,
-        //         desc: value,
-        //         createAt: moment(Date.now()).format("DD.MM.YYYY HH:mm:ss")
-        //     }
-        // });
         try {
             await publicRequest.post("themes", {
                 ...inputs,
@@ -133,6 +171,11 @@ const WriteMessage = ({ setOpen }) => {
                         onChange={e => setTxt(e.target.files[0])}
                     />
                 )}
+            {errorSize && errorSize.length && (
+                <ErrorContainer>
+                    <ErrorText>{errorSize}</ErrorText>
+                </ErrorContainer>
+            )}
             <ContainerButton>
                 <ColorButton
                     onClick={handleUpload}

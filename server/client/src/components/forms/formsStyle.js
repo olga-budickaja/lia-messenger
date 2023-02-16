@@ -8,7 +8,7 @@ export const Form = styled.form`
   gap: 10px;
 `;
 
-export const FormTitle = styled.h2`
+export const FormTitle = styled.h1`
     text-align: center;
   text-transform: uppercase;
   margin-bottom: 20px;
@@ -26,7 +26,7 @@ export const InputContainer = styled.div`
 export const Input = styled.input`
   width: 100%;
   padding: 10px;
-  border: 1px solid grey;
+  border: 1px solid lightgrey;
   border-radius: 5px;
 `;
 export const InputShow = styled.div`

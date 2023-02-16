@@ -14,15 +14,18 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { CSSTransition } from 'react-transition-group';
 import { publicRequest } from "../../requestMethod";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 
-const RegisterForm = ({setRegistration}) => {
+const RegisterForm = () => {
     const CAPTCHA_KEY = process.env.REACT_APP_CAPTCHA_KEY;
     const [captchaIsGoogle, setCaptchaIsGoogle] = useState(false);
     const [errorAxios, setErrorAxios] = useState(null);
     const [inProp, setInProp] = useState(false);
     const successRef = useRef(null);
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -43,7 +46,7 @@ const RegisterForm = ({setRegistration}) => {
             await publicRequest.post('auth/register', data);
             setInProp(true);
             setTimeout(() => setInProp(false), 2000);
-            setTimeout(() => setRegistration(true), 2000);
+            setTimeout(() => navigate("/login"), 2000);
         } catch (e) {
             setErrorAxios(e.response.data.message);
             setInProp(false);
@@ -161,7 +164,10 @@ const RegisterForm = ({setRegistration}) => {
                     Registration
                 </ColorButton>
             </Box>
-            <Button onClick={() => setRegistration(true)}>
+            <Button
+                component={RouterLink}
+                to="/login"
+            >
                 I have account
             </Button>
             <ErrorContainer>
