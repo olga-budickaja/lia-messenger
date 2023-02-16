@@ -7,7 +7,7 @@ import logo from "../../assets/logo.png";
 import { AuthContext } from "../../context/AuthContext";
 import { ErrorContainer, ErrorText } from "../forms/formsStyle";
 import { Link } from "react-router-dom";
-import WriteMessageModal from "../write-message-modal/WriteMessageModal";
+import WriteMessageModal from "../write-message/WriteMessageModal";
 
 const Navbar = () => {
     const { currentUser, logout } = useContext(AuthContext);

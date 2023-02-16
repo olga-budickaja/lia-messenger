@@ -4,6 +4,7 @@ import MessagePage from "../pages/message-page/MessagePage";
 import WriteMessagePage from "../pages/write-message-page/WriteMessagePage";
 import RegistrationPage from "../pages/registration-page/RegistrationPage";
 import LoginPage from "../pages/login-page/LoginPage";
+import ImgDropAndCrop from "./img-drop-and-crop/ImgDropAndCrop";
 
 const AppRouter = () => {
     return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
                 <Route path="login" element={<LoginPage />} />
                 <Route path="write" element={<WriteMessagePage />} />
                 <Route path="/message/:id" element={<MessagePage />} />
+                <Route path="/drop" element={<ImgDropAndCrop />} />
 
             </Route>
         </Routes>

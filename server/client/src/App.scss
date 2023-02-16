@@ -44,8 +44,13 @@ body {
     margin: 0 20px;
   }
 }
-.quill {
-  max-width: 355px;
+.ql-toolbar.ql-snow {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 .success-enter {
   opacity: 0;

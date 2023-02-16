@@ -1,4 +1,4 @@
-import { Button, styled } from "@mui/material";
+import { Button, IconButton, styled } from "@mui/material";
 import { cyan, pink } from "@mui/material/colors";
 
 export const ColorRoundButton = styled(Button)(({ theme }) => ({
@@ -29,6 +29,11 @@ export const ColorButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         backgroundColor: pink[600],
     },
+}));
+export const CloseButton = styled(IconButton)(({ theme }) => ({
+    position: 'absolute',
+    top: 0,
+    right: 20
 }));
 
 export const style = {

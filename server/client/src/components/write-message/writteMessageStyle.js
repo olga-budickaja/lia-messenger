@@ -28,6 +28,17 @@ export const Input = styled.input`
   padding: 10px 20px;
   border-radius: 5px;
 `;
+export const ContainerPreview = styled.div`
+  position: relative;
+  padding: 0 20px 10px 20px;
+  width: 320px;
+  height: 240px;
+`;
+export const ImgPreview= styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
 export const ContainerButton = styled.div`
   display: flex;
   justify-content: center;

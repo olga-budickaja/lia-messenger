@@ -14,7 +14,9 @@ const Themes = () => {
     const { currentUser } = useContext(AuthContext);
     const { isLoading, error, data } = useQuery(["themes"], () =>
         publicRequest.get('/themes').then((res) => {
-            return res.data
+           res.data.sort((t1, t2) => {
+               return  new Date(t2.createAt) - new Date(t1.createAt)
+            })
         })
     );
 

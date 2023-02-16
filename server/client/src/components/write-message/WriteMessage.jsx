@@ -6,16 +6,16 @@ import {
     Label,
     Qualification,
     ErrorContainer,
-    ErrorText
+    ErrorText, ContainerPreview, ImgPreview
 } from "./writteMessageStyle";
 import ReactQuill from "react-quill";
 import { useEffect, useState } from "react";
-import { ColorButton } from "../../ui/muiStyle";
+import { CloseButton, ColorButton } from "../../ui/muiStyle";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../../firebase";
 import { publicRequest } from "../../requestMethod";
 import moment from "moment";
-import Resizer from "react-image-file-resizer";
+import { CancelOutlined } from "@mui/icons-material";
 
 const WriteMessage = ({ setOpen }) => {
     const [value, setValue] = useState('');
@@ -26,6 +26,7 @@ const WriteMessage = ({ setOpen }) => {
     const [inputs, setInputs] = useState({});
     const [homepage, setHomepage] = useState('');
     const [errorSize, setErrorSize] = useState('');
+    const [sendFile, setSendFile] = useState();
 
     const modules = {
         toolbar: [
@@ -34,21 +35,21 @@ const WriteMessage = ({ setOpen }) => {
     }
     const formats = ['bold', 'italic', 'link', 'code-block'];
 
-    const resizeFile = (file) =>
-        new Promise((resolve) => {
-            Resizer.imageFileResizer(
-                file,
-                320,
-                240,
-                "JPEG",
-                100,
-                0,
-                (uri) => {
-                    resolve(uri);
-                },
-                "base64"
-            );
-        });
+    // const resizeFile = (file) =>
+    //     new Promise((resolve) => {
+    //         Resizer.imageFileResizer(
+    //             file,
+    //             320,
+    //             240,
+    //             "JPEG",
+    //             100,
+    //             0,
+    //             (uri) => {
+    //                 resolve(uri);
+    //             },
+    //             "base64"
+    //         );
+    //     });
 
     const uploadFile = (file, fileType) => {
         const storage = getStorage(app);
@@ -91,25 +92,22 @@ const WriteMessage = ({ setOpen }) => {
     };
 
     useEffect(() => {
-        txt && txt > 100 * 1024
-            ? setErrorSize("large file size")
-            : setErrorSize("") && console.log(txt)
-    }, [txt]);
-
-    useEffect(() => {
-        const sendImg = async () => {
+        if (img) {
             try {
-                if (img) {
-                    await resizeFile(img)
-                    console.log(img)
-                    // uploadFile(img, "fileImg")
-                }
+                uploadFile(img, "fileImg");
             } catch (e) {
                 console.log(e)
             }
+
         }
-        sendImg();
     }, [img]);
+
+    useEffect(() => {
+        txt && txt > 100 * 1024
+            ? setErrorSize("large file size")
+            : setErrorSize("") && uploadFile(txt, "fileTxt")
+    }, [txt]);
+
 
     const handleUpload = async (e) => {
         e.preventDefault();
@@ -125,6 +123,10 @@ const WriteMessage = ({ setOpen }) => {
         } catch (e) {
             console.log(e)
         }
+    }
+    const handleClose = () => {
+        setImg(undefined);
+        window.location.reload();
     }
 
     return (
@@ -159,6 +161,14 @@ const WriteMessage = ({ setOpen }) => {
                         onChange={e => setImg(e.target.files[0])}
                     />
                 )}
+            {img && (
+                <ContainerPreview>
+                    <ImgPreview src={URL.createObjectURL(img)} />
+                    <CloseButton onClick={handleClose}>
+                        <CancelOutlined/>
+                    </CloseButton>
+                </ContainerPreview>
+            )}
 
             <Label>Upload file:</Label>
             <Qualification>(max size 100kBt, format .txt)</Qualification>
