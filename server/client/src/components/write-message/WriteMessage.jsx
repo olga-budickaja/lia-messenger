@@ -171,7 +171,7 @@ const WriteMessage = () => {
                     formats={formats}
                 />
             </div>
-            <Label>Upload your homepage:</Label>
+            <Label>Upload homepage:</Label>
             <Input
                 type="url"
                 name="homepage"

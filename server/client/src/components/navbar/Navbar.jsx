@@ -8,6 +8,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { ErrorContainer, ErrorText } from "../forms/formsStyle";
 import { Link } from "react-router-dom";
 import WriteMessageModal from "../write-message/WriteMessageModal";
+import { Link as RouterLink } from "react-router-dom";
 
 const Navbar = () => {
     const { currentUser, logout } = useContext(AuthContext);
@@ -51,9 +52,12 @@ const Navbar = () => {
             }}
             open={isMenuOpen}
             onClose={handleMenuClose}
+            sx={{ top: 30 }}
         >
             <MenuItem
-                onClick={() => currentUser === null ? setOpen(true) : handleLogout()}
+                component={RouterLink}
+                to={currentUser === null && "/registration"}
+                onClick={() => currentUser !== null && handleLogout()}
             >
                 {currentUser === null
                     ? "Log in"

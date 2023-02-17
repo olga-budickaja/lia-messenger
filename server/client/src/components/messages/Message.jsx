@@ -11,6 +11,8 @@ import avatar1 from "../../assets/avatar1.png";
 import avatar2 from "../../assets/avatar2.png";
 import { Badge, Box, IconButton, Tooltip } from "@mui/material";
 import {
+    ContactPageOutlined,
+    FilePresentOutlined,
     QuestionAnswerOutlined,
     RemoveCircleOutlineOutlined,
     ShortcutOutlined,
@@ -81,10 +83,6 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
         return `${date} in ${time}`
     }
 
-    useEffect(() => {
-
-    }, [])
-
     return (
         <>
             <ContainerMessage
@@ -106,41 +104,65 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
 
                     <h6>{message.username}</h6>
                     <Span>{parseDate(message.createAt)}</Span>
+                    <h6>{message.email}</h6>
                     <Box sx={{ flexGrow: 1 }} />
-                    {type === "rcv" && count && (
+                    <ContainerTitle>
+                        {type === "rcv" && count !== 0 && (
+                            <IconButton
+                                onClick={() => setOpenMessage(!openMessage)}
+                            >
+                                <Tooltip title="Read comments">
+                                    <Badge badgeContent={count} color="success">
+                                        <QuestionAnswerOutlined />
+                                    </Badge>
+                                </Tooltip>
+                            </IconButton>
+                        )}
                         <IconButton
-                            onClick={() => setOpenMessage(!openMessage)}
+                            component={RouterLink}
+                            to={`message/${message.id}`}
                         >
-                            <Tooltip title="Write comments">
-                                <Badge badgeContent={count} color="success">
-                                    <QuestionAnswerOutlined />
-                                </Badge>
+                            <Tooltip title="See all theme">
+                                <VisibilityOutlined />
                             </Tooltip>
                         </IconButton>
-                    )}
-                    <IconButton
-                        component={RouterLink}
-                        to={`message/${message.id}`}
-                    >
-                        <Tooltip title="See all theme">
-                            <VisibilityOutlined />
-                        </Tooltip>
-                    </IconButton>
-                    <IconButton
-                        component={RouterLink}
-                        to={currentUser === null ? "/registration" : "/write"}
-                        answer={message.id}
-                        onClick={() => setAnswer(message.id)}
-                    >
-                        <Tooltip title="Answer">
-                            <ShortcutOutlined />
-                        </Tooltip>
-                    </IconButton>
-                    <IconButton onClick={handleDelete}>
-                        <Tooltip title="Delete message">
-                            <RemoveCircleOutlineOutlined sx={{ fill: "#e91e63" }}/>
-                        </Tooltip>
-                    </IconButton>
+                        {message.homepage && (
+                            <a href={message.homepage} target="_blank">
+                                <IconButton>
+                                    <Tooltip title="Hom page">
+                                        <ContactPageOutlined />
+                                    </Tooltip>
+                                </IconButton>
+                            </a>
+                        )}
+                        {message.fileTxt && (
+                            <a href={message.fileTxt} target="_blank">
+                                <IconButton>
+                                    <Tooltip title="See file">
+                                        <FilePresentOutlined />
+                                    </Tooltip>
+                                </IconButton>
+                            </a>
+                        )}
+
+                        <IconButton
+                            component={RouterLink}
+                            to={currentUser === null ? "/registration" : "/write"}
+                            answer={message.id}
+                            onClick={() => setAnswer(message.id)}
+                        >
+                            <Tooltip title="Answer">
+                                <ShortcutOutlined />
+                            </Tooltip>
+                        </IconButton>
+                        <IconButton onClick={handleDelete}>
+                            <Tooltip title="Delete message">
+                                <RemoveCircleOutlineOutlined sx={{ fill: "#e91e63" }}/>
+                            </Tooltip>
+                        </IconButton>
+                    </ContainerTitle>
+
+
                 </ContainerTitle>
 
                 <ContainerDesc>

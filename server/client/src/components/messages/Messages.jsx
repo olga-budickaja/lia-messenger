@@ -2,7 +2,7 @@ import {
     ContainerMessage,
     ContainerMessages,
 } from "./messagesStyle";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import { publicRequest } from "../../requestMethod";
 
@@ -11,6 +11,7 @@ const Messages = ({ message }) => {
     const [childrenMessages, setChildrenMessages] = useState([]);
     const [openMessage, setOpenMessage] = useState(false);
     const themeId = message.id;
+    const scrollRef = useRef();
 
     useEffect(() => {
         try {
@@ -23,6 +24,10 @@ const Messages = ({ message }) => {
             console.log(e);
         }
     }, [themeId]);
+
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({behavior: "smooth"});
+    }, [childrenMessages])
 
     return (
         <>
@@ -39,11 +44,14 @@ const Messages = ({ message }) => {
             {openMessage && (
                 <ContainerMessage>
                     {childrenMessages.map(child => (
-                        <Message
-                            type=""
-                            message={child}
-                            key={child.id}
-                        />
+                        <div ref={scrollRef}>
+                            <Message
+                                type=""
+                                message={child}
+                                key={child.id}
+                            />
+                        </div>
+
                     ))}
                 </ContainerMessage>
             )}

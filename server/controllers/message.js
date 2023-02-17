@@ -6,7 +6,7 @@ dotenv.config();
 
 export const getMess = (req, res) => {
         const q = req.query.themeId
-            ? `SELECT m.*, u.id AS uid, username FROM messages AS m JOIN users AS u ON (u.id = m.uid) WHERE m.themeId = ?`
+            ? `SELECT m.*, u.id AS uid, username, email FROM messages AS m JOIN users AS u ON (u.id = m.uid) WHERE m.themeId = ?`
             : `SELECT * FROM messages`
 
     db.query(q, [req.query.themeId], (err, data) => {
@@ -17,7 +17,7 @@ export const getMess = (req, res) => {
 };
 
 export const getConvMess = (req, res) => {
-   const q = "SELECT `username`, `desc`, `picture`, `file`, `uid` FROM users u JOIN members c JOIN messages m ON (m.uid = u.id) AND (c.senderId = u.id) OR (c.receiverId = u.id) WHERE c.id = ?";
+   const q = "SELECT m.*, u.id AS uid, username, email FROM users u JOIN members c JOIN messages m ON (m.uid = u.id) AND (c.senderId = u.id) OR (c.receiverId = u.id) WHERE c.id = ?";
 
    db.query(q, [req.params.conversationId], (err, data) => {
        if (err) return res.status(500).json(err);

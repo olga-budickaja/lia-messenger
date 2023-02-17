@@ -2,7 +2,7 @@ import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
 export const getThemes = (req, res) => {
-    const q = `SELECT t.*, u.id AS userId, username FROM themes AS t JOIN users AS u ON (u.id = t.userId)`
+    const q = `SELECT t.*, u.id AS userId, username, email, homepage FROM themes AS t JOIN users AS u ON (u.id = t.userId)`
 
     db.query(q, (err, data) => {
         if (err) return res.status(500).json(err);
@@ -10,7 +10,7 @@ export const getThemes = (req, res) => {
     });
 }
 export const getOneTheme = (req, res) => {
-    const q = `SELECT t.*, u.id AS userId, username FROM themes AS t JOIN users AS u ON (u.id = t.userId) WHERE t.id = ?`;
+    const q = `SELECT t.*, u.id AS userId, username, email, homepage FROM themes AS t JOIN users AS u ON (u.id = t.userId) WHERE t.id = ?`;
 
     db.query(q, [req.params.id], (err, data) => {
         if (err) return res.status(500).json(err);

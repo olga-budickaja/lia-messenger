@@ -128,17 +128,6 @@ const RegisterForm = () => {
                     </ErrorText>
                 }
             </ErrorContainer>
-            <Input
-                placeholder="homepage"
-                type="url"
-                {...register('homepage', {
-                    required: false,
-                    pattern: {
-                        value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-                        message: "Invalid url"
-                    }
-                })}
-            />
             <ErrorContainer>
                 {errors?.homepage &&
                     <ErrorText>

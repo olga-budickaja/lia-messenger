@@ -5,14 +5,21 @@ import { publicRequest } from "../../requestMethod";
 import { ButtonNew } from "../messages/messagesStyle";
 import { Tooltip } from "@mui/material";
 import { ColorRoundButton } from "../../ui/muiStyle";
-import { AddOutlined } from "@mui/icons-material";
+import {
+    AddOutlined,
+    CalendarMonthOutlined,
+    ImportExportOutlined,
+    TextRotateVerticalOutlined
+} from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import SortMessages from "../sorts/SortMessages";
 
-const Themes = () => {
+const MessageThemes = () => {
     const { currentUser } = useContext(AuthContext);
     const [themes, setThemes] = useState([]);
+    const [sortName, setSortName] = useState('');
 
     const { isLoading, error, data } = useQuery(["themes"], () =>
         publicRequest.get('/themes').then((res) => {
@@ -30,11 +37,28 @@ const Themes = () => {
             }
         }
         sortsData()
-    }, [data])
+    }, [data]);
 
+
+
+    const items = [
+        {name: 'username', title: 'Sort by username', icon: <TextRotateVerticalOutlined />},
+        {name: 'email', title: 'Sort by email', icon: <ImportExportOutlined />},
+        {name: 'createAt', title: 'Sort by date', icon: <CalendarMonthOutlined />},
+    ];
+
+    const sortMessageName = (sort) => {
+        setSortName(sort);
+        setThemes([...themes].sort((a, b) => a[sort].localeCompare(b[sort])));
+    }
 
     return (
         <Container>
+            <SortMessages
+                items={items}
+                name={sortName}
+                onClick={sortMessageName}
+            />
             {error
                 ? "Something went wrong!"
                 : isLoading
@@ -60,4 +84,4 @@ const Themes = () => {
     );
 };
 
-export default Themes;
+export default MessageThemes;

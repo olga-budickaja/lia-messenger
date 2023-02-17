@@ -43,7 +43,7 @@ const LoginForm = () => {
             await login(data);
             setInProp(true);
             setTimeout(() => setInProp(false), 2000);
-            setTimeout(() => navigate("/write"), 2000);
+            setTimeout(() => navigate("/"), 2000);
         }catch (e) {
             setErrorAxios(e.response.data.message);
             setInProp(false);

@@ -1,10 +1,10 @@
 import { Container } from "./homeStyle";
-import Themes from "../../components/themes/Themes";
+import MessageThemes from "../../components/themes/MessageThemes";
 
 const Home = () => {
     return (
         <Container>
-            <Themes />
+            <MessageThemes />
         </Container>
     );
 };
