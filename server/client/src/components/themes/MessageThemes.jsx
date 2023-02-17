@@ -1,9 +1,9 @@
-import { Container } from "./themesStyle";
+import { Container, NoMessages, PaginationContainer } from "./themesStyle";
 import Messages from "../messages/Messages";
 import { useQuery } from "@tanstack/react-query";
 import { publicRequest } from "../../requestMethod";
 import { ButtonNew } from "../messages/messagesStyle";
-import { Tooltip } from "@mui/material";
+import { Pagination, Stack, Tooltip } from "@mui/material";
 import { ColorRoundButton } from "../../ui/muiStyle";
 import {
     AddOutlined,
@@ -23,7 +23,7 @@ const MessageThemes = () => {
     const [sortName, setSortName] = useState('');
 
     const { isLoading, error, data } = useQuery(["themes"], () =>
-        publicRequest.get('/themes').then((res) => {
+        publicRequest.get(`/themes`).then((res) => {
             return res.data
         })
     );
@@ -32,13 +32,16 @@ const MessageThemes = () => {
         const sortsData = async () => {
             if (data) {
                 setThemes(data)
-                themes.sort((t1, t2) => {
-                    return new Date(t2.createAt) - new Date(t1.createAt)
-                })
+
+                // themes.sort((t1, t2) => {
+                //     return new Date(t2.createAt) - new Date(t1.createAt)
+                // })
             }
         }
         sortsData()
     }, [data]);
+
+    console.log(themes.data)
 
     const items = [
         {name: 'username', title: 'Sort by username', icon: <TextRotateVerticalOutlined />},
@@ -53,28 +56,35 @@ const MessageThemes = () => {
 
     return (
         <Container>
-            <SortMessages
-                items={items}
-                name={sortName}
-                onClick={sortMessageName}
-            />
-            <TransitionGroup>
-                {error
-                    ? "Something went wrong!"
-                    : isLoading
-                        ? "Loading..."
-                        : themes.map((message) =>
-                            <CSSTransition
-                                timeout={500}
-                                classNames="message"
-                                key={message.id}
-                            >
-                                <Messages main="main" message={message} />
-                            </CSSTransition>
+            {!themes
+                ? (<NoMessages>"Write a message`s` theme to start a chat."</NoMessages>)
+                : (
+                    <>
+                        <SortMessages
+                            items={items}
+                            name={sortName}
+                            onClick={sortMessageName}
+                        />
+                        <TransitionGroup>
+                            {error
+                                ? "Something went wrong!"
+                                : isLoading
+                                    ? "Loading..."
+                                    : themes.data.map((message) =>
+                                        <CSSTransition
+                                            timeout={500}
+                                            classNames="message"
+                                            key={message.id}
+                                        >
+                                            <Messages main="main" message={message} />
+                                        </CSSTransition>
 
-                        )
-                }
-            </TransitionGroup>
+                                    )
+                            }
+                        </TransitionGroup>
+                    </>
+                )
+            }
             <ButtonNew>
                 <Tooltip title="Add new theme">
                     <ColorRoundButton
@@ -88,6 +98,11 @@ const MessageThemes = () => {
                     </ColorRoundButton>
                 </Tooltip>
             </ButtonNew>
+            <PaginationContainer>
+                <Stack spacing={2}>
+                    <Pagination count={themes.endingLink} variant="outlined" />
+                </Stack>
+            </PaginationContainer>
         </Container>
     );
 };
