@@ -7,18 +7,31 @@ import { Tooltip } from "@mui/material";
 import { ColorRoundButton } from "../../ui/muiStyle";
 import { AddOutlined } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 const Themes = () => {
     const { currentUser } = useContext(AuthContext);
+    const [themes, setThemes] = useState([]);
+
     const { isLoading, error, data } = useQuery(["themes"], () =>
         publicRequest.get('/themes').then((res) => {
-           res.data.sort((t1, t2) => {
-               return  new Date(t2.createAt) - new Date(t1.createAt)
-            })
+            return res.data
         })
     );
+
+    useEffect(() => {
+        const sortsData = async () => {
+            if (data) {
+                setThemes(data)
+                themes.sort((t1, t2) => {
+                    return new Date(t2.createAt) - new Date(t1.createAt)
+                })
+            }
+        }
+        sortsData()
+    }, [data])
+
 
     return (
         <Container>
@@ -26,7 +39,7 @@ const Themes = () => {
                 ? "Something went wrong!"
                 : isLoading
                     ? "Loading..."
-                    : data.map((message) =>
+                    : themes.map((message) =>
                         <Messages main="main" message={message} key={message.id} />
                     )
             }

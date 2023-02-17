@@ -18,13 +18,15 @@ import {
     ZoomInOutlined
 } from "@mui/icons-material";
 import ImageZoom from "./ImageZoom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { publicRequest } from "../../requestMethod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import moment from "moment";
+import { AuthContext } from "../../context/AuthContext";
 
-const Message = ({type, message, setOpenWrite}) => {
+const Message = ({type, message}) => {
+    const { setAnswer } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
     const [openList, setOpenList] = useState(false);
     const queryClient = useQueryClient();
@@ -120,7 +122,12 @@ const Message = ({type, message, setOpenWrite}) => {
                             <VisibilityOutlined />
                         </Tooltip>
                     </IconButton>
-                    <IconButton onClick={() => setOpenWrite(true)}>
+                    <IconButton
+                        component={RouterLink}
+                        to="/write"
+                        answer={message.id}
+                        onClick={() => setAnswer(message.id)}
+                    >
                         <Tooltip title="Answer">
                             <ShortcutOutlined />
                         </Tooltip>

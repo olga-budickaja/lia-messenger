@@ -70,7 +70,8 @@ export const ContainerText = styled.div`
     flex: 2;
 `;
 export const ImgMessage = styled.img`
-    max-width: 100%;
+  width: 100%;
+  object-fit: contain;
   height: auto;
   border-radius: 8px;
 `;

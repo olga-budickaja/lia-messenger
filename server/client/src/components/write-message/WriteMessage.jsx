@@ -6,27 +6,33 @@ import {
     Label,
     Qualification,
     ErrorContainer,
-    ErrorText, ContainerPreview, ImgPreview
+    ErrorText, ContainerPreview, ImgPreview,
 } from "./writteMessageStyle";
 import ReactQuill from "react-quill";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CloseButton, ColorButton } from "../../ui/muiStyle";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import app from "../../firebase";
 import { publicRequest } from "../../requestMethod";
 import moment from "moment";
 import { CancelOutlined } from "@mui/icons-material";
+import "cropperjs/dist/cropper.css";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
-const WriteMessage = ({ setOpen }) => {
+const WriteMessage = () => {
+    const { answer, setAnswer } = useContext(AuthContext);
     const [value, setValue] = useState('');
     const [img, setImg] = useState(undefined);
+    const [imgLink, setImgLink] = useState(undefined);
     const [txt, setTxt] = useState(undefined);
     const [imgPrc, setImgPrc] = useState(0);
     const [txtPrc, setTxtPrc] = useState(0);
     const [inputs, setInputs] = useState({});
     const [homepage, setHomepage] = useState('');
-    const [errorSize, setErrorSize] = useState('');
-    const [sendFile, setSendFile] = useState();
+    const [errorFileSize, setErrorFileSize] = useState('');
+    const [errorImgSize, setErrorImgSize] = useState('');
+    const navigate = useNavigate();
 
     const modules = {
         toolbar: [
@@ -51,6 +57,9 @@ const WriteMessage = ({ setOpen }) => {
     //         );
     //     });
 
+    // const onCropEnd = () => {
+    //     setIsCropped(true)
+    // }
     const uploadFile = (file, fileType) => {
         const storage = getStorage(app);
         const fileName = new Date().getTime() + file.name;
@@ -85,47 +94,65 @@ const WriteMessage = ({ setOpen }) => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     setInputs((prev) => {
                         return { ...prev, [fileType]: downloadURL }
-                    })
+                    });
                 });
             }
         );
     };
+    const deleteImgFromStorage = (img) => {
+        const storage = getStorage();
+        const desertRef = ref(storage, `/${img}`);
+            deleteObject(desertRef).then(() => {
+                setErrorImgSize("Image size must be 4x3!");
+                setTimeout(() => setErrorImgSize(""), 2000);
+            }).catch((error) => {
+                console.log(error)
+            });
+    }
 
     useEffect(() => {
-        if (img) {
-            try {
-                uploadFile(img, "fileImg");
-            } catch (e) {
-                console.log(e)
-            }
+        img && uploadFile(img, "fileImg");
+    }, [img])
 
-        }
-    }, [img]);
 
     useEffect(() => {
+        txt && uploadFile(txt, "fileTxt");
         txt && txt > 100 * 1024
-            ? setErrorSize("large file size")
-            : setErrorSize("") && uploadFile(txt, "fileTxt")
+            ? setErrorFileSize("large file size!") && deleteImgFromStorage(imgLink)
+            : setErrorFileSize("") && uploadFile(txt, "fileTxt")
     }, [txt]);
-
 
     const handleUpload = async (e) => {
         e.preventDefault();
-
         try {
-            await publicRequest.post("themes", {
-                ...inputs,
-                desc: value,
-                homepage,
-                createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
-            });
-            setOpen(false);
+            if (!answer) {
+                await publicRequest.post("themes", {
+                    ...inputs,
+                    desc: value,
+                    homepage,
+                    themeId: answer,
+                    createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
+                });
+                navigate("/");
+            } else {
+                await publicRequest.post("messages", {
+                    ...inputs,
+                    desc: value,
+                    themeId: answer,
+                    homepage,
+                    createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
+                });
+                navigate(`/message/${answer}`);
+                setAnswer(null);
+            }
+
         } catch (e) {
             console.log(e)
         }
     }
     const handleClose = () => {
         setImg(undefined);
+        deleteImgFromStorage(imgLink);
         window.location.reload();
     }
 
@@ -161,13 +188,17 @@ const WriteMessage = ({ setOpen }) => {
                         onChange={e => setImg(e.target.files[0])}
                     />
                 )}
-            {img && (
+            {(img && !errorImgSize) ? (
                 <ContainerPreview>
                     <ImgPreview src={URL.createObjectURL(img)} />
                     <CloseButton onClick={handleClose}>
                         <CancelOutlined/>
                     </CloseButton>
                 </ContainerPreview>
+            ) : (
+                <ErrorContainer>
+                    <ErrorText>{errorImgSize}</ErrorText>
+                </ErrorContainer>
             )}
 
             <Label>Upload file:</Label>
@@ -181,9 +212,9 @@ const WriteMessage = ({ setOpen }) => {
                         onChange={e => setTxt(e.target.files[0])}
                     />
                 )}
-            {errorSize && errorSize.length && (
+            {errorFileSize && errorFileSize.length && (
                 <ErrorContainer>
-                    <ErrorText>{errorSize}</ErrorText>
+                    <ErrorText>{errorFileSize}</ErrorText>
                 </ErrorContainer>
             )}
             <ContainerButton>

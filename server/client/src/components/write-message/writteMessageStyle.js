@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+export const StyledCropper = styled(Cropper)`
+    width: 320px;
+  height: 240px;
+`;
 export const Container = styled.div`
     display: flex;
   flex-direction: column;
@@ -30,6 +35,9 @@ export const Input = styled.input`
 `;
 export const ContainerPreview = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 0 20px 10px 20px;
   width: 320px;
   height: 240px;
@@ -37,7 +45,7 @@ export const ContainerPreview = styled.div`
 export const ImgPreview= styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 `;
 export const ContainerButton = styled.div`
   display: flex;
@@ -48,6 +56,6 @@ export const ErrorContainer = styled.div`
 `;
 export const ErrorText = styled.span`
  color: red;
- font-size: 12px;
+ font-size: 16px;
  font-weight: 600;
 `;

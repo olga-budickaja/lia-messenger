@@ -9,7 +9,6 @@ import { publicRequest } from "../../requestMethod";
 
 const Messages = ({ message }) => {
     const [childrenMessages, setChildrenMessages] = useState([]);
-
     const messageId = message.id;
 
     useEffect(() => {
@@ -31,7 +30,7 @@ const Messages = ({ message }) => {
             </ContainerMessages>
             <ContainerMessage>
                 {childrenMessages.map(child => (
-                    <Message type={type} message={child} key={child.id} />
+                    <Message type="" message={child} key={child.id} />
                 ))}
             </ContainerMessage>
         </>
