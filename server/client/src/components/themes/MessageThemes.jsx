@@ -12,9 +12,10 @@ import {
     TextRotateVerticalOutlined
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import SortMessages from "../sorts/SortMessages";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 const MessageThemes = () => {
     const { currentUser } = useContext(AuthContext);
@@ -39,8 +40,6 @@ const MessageThemes = () => {
         sortsData()
     }, [data]);
 
-
-
     const items = [
         {name: 'username', title: 'Sort by username', icon: <TextRotateVerticalOutlined />},
         {name: 'email', title: 'Sort by email', icon: <ImportExportOutlined />},
@@ -59,14 +58,23 @@ const MessageThemes = () => {
                 name={sortName}
                 onClick={sortMessageName}
             />
-            {error
-                ? "Something went wrong!"
-                : isLoading
-                    ? "Loading..."
-                    : themes.map((message) =>
-                        <Messages main="main" message={message} key={message.id} />
-                    )
-            }
+            <TransitionGroup>
+                {error
+                    ? "Something went wrong!"
+                    : isLoading
+                        ? "Loading..."
+                        : themes.map((message) =>
+                            <CSSTransition
+                                timeout={500}
+                                classNames="message"
+                                key={message.id}
+                            >
+                                <Messages main="main" message={message} />
+                            </CSSTransition>
+
+                        )
+                }
+            </TransitionGroup>
             <ButtonNew>
                 <Tooltip title="Add new theme">
                     <ColorRoundButton
