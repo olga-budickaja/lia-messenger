@@ -4,25 +4,18 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-//add
-
 export const getMess = (req, res) => {
-        const q = `SELECT m.*, u.id AS uid, username FROM messages AS m JOIN users AS u ON (u.id = m.uid)`
+        const q = req.query.themeId
+            ? `SELECT m.*, u.id AS uid, username FROM messages AS m JOIN users AS u ON (u.id = m.uid) WHERE m.themeId = ?`
+            : `SELECT * FROM messages`
 
-        db.query(q, (err, data) => {
-            if (err) return res.status(500).json(err);
-            return res.status(200).json(data);
-        });
+    db.query(q, [req.query.themeId], (err, data) => {
+        if (err) return res.status(500).json(err);
+
+        return res.status(200).json(data);
+    });
 };
-export const getThemeMess = (req, res) => {
-   const q = "SELECT m.*, u.id AS uid, username  FROM users u JOIN messages m JOIN themes t  ON (m.uid = u.id) AND (t.userId = u.id) WHERE m.themeId = ?";
 
-   db.query(q, [req.params.id], (err, data) => {
-       if (err) return res.status(500).json(err);
-
-       return res.status(200).json(data)
-   });
-}
 export const getConvMess = (req, res) => {
    const q = "SELECT `username`, `desc`, `picture`, `file`, `uid` FROM users u JOIN members c JOIN messages m ON (m.uid = u.id) AND (c.senderId = u.id) OR (c.receiverId = u.id) WHERE c.id = ?";
 

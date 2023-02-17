@@ -25,10 +25,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import moment from "moment";
 import { AuthContext } from "../../context/AuthContext";
 
-const Message = ({type, message}) => {
+const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
+    const { currentUser } = useContext(AuthContext);
     const { setAnswer } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
-    const [openList, setOpenList] = useState(false);
     const queryClient = useQueryClient();
     const [conversations, setConversations] = useState([]);
 
@@ -81,6 +81,10 @@ const Message = ({type, message}) => {
         return `${date} in ${time}`
     }
 
+    useEffect(() => {
+
+    }, [])
+
     return (
         <>
             <ContainerMessage
@@ -103,12 +107,12 @@ const Message = ({type, message}) => {
                     <h6>{message.username}</h6>
                     <Span>{parseDate(message.createAt)}</Span>
                     <Box sx={{ flexGrow: 1 }} />
-                    {type === "rcv" && (
+                    {type === "rcv" && count && (
                         <IconButton
-                            onClick={() => setOpenList(true)}
+                            onClick={() => setOpenMessage(!openMessage)}
                         >
                             <Tooltip title="Write comments">
-                                <Badge badgeContent={4} color="success">
+                                <Badge badgeContent={count} color="success">
                                     <QuestionAnswerOutlined />
                                 </Badge>
                             </Tooltip>
@@ -124,7 +128,7 @@ const Message = ({type, message}) => {
                     </IconButton>
                     <IconButton
                         component={RouterLink}
-                        to="/write"
+                        to={currentUser === null ? "/registration" : "/write"}
                         answer={message.id}
                         onClick={() => setAnswer(message.id)}
                     >

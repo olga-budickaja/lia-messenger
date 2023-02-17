@@ -9,30 +9,45 @@ import { publicRequest } from "../../requestMethod";
 
 const Messages = ({ message }) => {
     const [childrenMessages, setChildrenMessages] = useState([]);
-    const messageId = message.id;
+    const [openMessage, setOpenMessage] = useState(false);
+    const themeId = message.id;
 
     useEffect(() => {
         try {
             const fetchChildrenMessage = async () => {
-                const res = await publicRequest.get(`/messages/theme/${messageId}`);
+                const res = await publicRequest.get(`messages?themeId=${themeId}`);
                 setChildrenMessages(res.data);
             }
             fetchChildrenMessage();
         } catch (e) {
             console.log(e);
         }
-    }, [messageId]);
+    }, [themeId]);
 
     return (
         <>
             <ContainerMessages>
-                <Message type="rcv" message={message}/>
+                <Message
+                    type="rcv"
+                    message={message}
+                    setOpenMessage={setOpenMessage}
+                    openMessage={openMessage}
+                    count={childrenMessages?.length}
+                    themeId={themeId}
+                />
             </ContainerMessages>
-            <ContainerMessage>
-                {childrenMessages.map(child => (
-                    <Message type="" message={child} key={child.id} />
-                ))}
-            </ContainerMessage>
+            {openMessage && (
+                <ContainerMessage>
+                    {childrenMessages.map(child => (
+                        <Message
+                            type=""
+                            message={child}
+                            key={child.id}
+                        />
+                    ))}
+                </ContainerMessage>
+            )}
+
         </>
     );
 };
