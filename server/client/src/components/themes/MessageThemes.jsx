@@ -31,17 +31,11 @@ const MessageThemes = () => {
     useEffect(() => {
         const sortsData = async () => {
             if (data) {
-                setThemes(data)
-
-                // themes.sort((t1, t2) => {
-                //     return new Date(t2.createAt) - new Date(t1.createAt)
-                // })
+                setThemes(data?.data)
             }
         }
         sortsData()
-    }, [data]);
-
-    console.log(themes.data)
+    }, [data?.data]);
 
     const items = [
         {name: 'username', title: 'Sort by username', icon: <TextRotateVerticalOutlined />},
@@ -70,11 +64,11 @@ const MessageThemes = () => {
                                 ? "Something went wrong!"
                                 : isLoading
                                     ? "Loading..."
-                                    : themes.data.map((message) =>
+                                    : themes.map((message) =>
                                         <CSSTransition
                                             timeout={500}
                                             classNames="message"
-                                            key={message.id}
+                                            key={message?.id}
                                         >
                                             <Messages main="main" message={message} />
                                         </CSSTransition>
@@ -100,7 +94,7 @@ const MessageThemes = () => {
             </ButtonNew>
             <PaginationContainer>
                 <Stack spacing={2}>
-                    <Pagination count={themes.endingLink} variant="outlined" />
+                    <Pagination count={themes?.endingLink} variant="outlined" />
                 </Stack>
             </PaginationContainer>
         </Container>

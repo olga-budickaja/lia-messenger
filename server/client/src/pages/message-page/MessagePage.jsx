@@ -2,7 +2,7 @@ import { Container, Title } from "./massagePageStyle";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { publicRequest } from "../../requestMethod";
-import Messages from "../../components/messages/Messages";
+import Message from "../../components/messages/Message";
 
 const MessagePage = () => {
     const location = useLocation();
@@ -14,6 +14,8 @@ const MessagePage = () => {
         })
     );
 
+    console.log(data)
+
     return (
         <Container>
             <Title>Message`s page №: {messageId}</Title>
@@ -21,9 +23,7 @@ const MessagePage = () => {
                 ? "Something went wrong!"
                 : isLoading
                     ? "Loading..."
-                    : data.map((message) =>
-                        <Messages message={message} key={message.id} type="rcv" />
-                    )
+                    : <Message message={data[0]} type="rcv" />
             }
         </Container>
     );

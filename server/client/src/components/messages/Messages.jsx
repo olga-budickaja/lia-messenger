@@ -10,7 +10,7 @@ import { publicRequest } from "../../requestMethod";
 const Messages = ({ message }) => {
     const [childrenMessages, setChildrenMessages] = useState([]);
     const [openMessage, setOpenMessage] = useState(false);
-    const themeId = message.id;
+    const themeId = message?.id;
     const scrollRef = useRef();
 
     useEffect(() => {
@@ -44,11 +44,10 @@ const Messages = ({ message }) => {
             {openMessage && (
                 <ContainerMessage>
                     {childrenMessages.map(child => (
-                        <div ref={scrollRef}>
+                        <div ref={scrollRef} key={child?.id}>
                             <Message
                                 type=""
                                 message={child}
-                                key={child.id}
                             />
                         </div>
 

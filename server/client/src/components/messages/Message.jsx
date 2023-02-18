@@ -34,7 +34,7 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
     const queryClient = useQueryClient();
     const [conversations, setConversations] = useState([]);
 
-    const userId = message.uid;
+    const userId = message?.uid;
 
     useEffect(() => {
 
@@ -70,7 +70,7 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
         }
     );
     const handleDelete = () => {
-        deleteMutation.mutate(message.id);
+        deleteMutation.mutate(message?.id);
     };
     const getText = (html) => {
         const doc = new DOMParser().parseFromString(html, "text/html");
@@ -87,12 +87,12 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
         <>
             <ContainerMessage
                 type={type
-                ? (conversations.find(m => m.id === message.memId && m.senderId !== message.uid && m.receiverId === message.uid)) && "rcv"
+                ? (conversations.find(m => m?.id === message?.memId && m.senderId !== message?.uid && m?.receiverId === message?.uid)) && "rcv"
                 : "snd"
             }>
                 <ContainerTitle
                     type={type
-                        ? (conversations.find(m => m.id === message.memId && m.senderId !== message.uid && m.receiverId === message.uid)) && "rcv"
+                        ? (conversations.find(m => m.id === message?.memId && m.senderId !== message?.uid && m.receiverId === message?.uid)) && "rcv"
                         : "snd"
                     }
                     elevation={0}
@@ -102,9 +102,9 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
                         : (<Image src={avatar2} />)
                     }
 
-                    <h6>{message.username}</h6>
-                    <Span>{parseDate(message.createAt)}</Span>
-                    <h6>{message.email}</h6>
+                    <h6>{message?.username}</h6>
+                    <Span>{parseDate(message?.createAt)}</Span>
+                    <h6>{message?.email}</h6>
                     <Box sx={{ flexGrow: 1 }} />
                     <ContainerTitle>
                         {type === "rcv" && count !== 0 && (
@@ -120,14 +120,14 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
                         )}
                         <IconButton
                             component={RouterLink}
-                            to={`message/${message.id}`}
+                            to={`message/${message?.id}`}
                         >
                             <Tooltip title="See all theme">
                                 <VisibilityOutlined />
                             </Tooltip>
                         </IconButton>
-                        {message.homepage && (
-                            <a href={message.homepage} target="_blank">
+                        {message?.homepage && (
+                            <a href={message?.homepage} target="_blank">
                                 <IconButton>
                                     <Tooltip title="Hom page">
                                         <ContactPageOutlined />
@@ -135,8 +135,8 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
                                 </IconButton>
                             </a>
                         )}
-                        {message.fileTxt && (
-                            <a href={message.fileTxt} target="_blank">
+                        {message?.fileTxt && (
+                            <a href={message?.fileTxt} target="_blank">
                                 <IconButton>
                                     <Tooltip title="See file">
                                         <FilePresentOutlined />
@@ -148,8 +148,8 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
                         <IconButton
                             component={RouterLink}
                             to={currentUser === null ? "/registration" : "/write"}
-                            answer={message.id}
-                            onClick={() => setAnswer(message.id)}
+                            answer={message?.id}
+                            onClick={() => setAnswer(message?.id)}
                         >
                             <Tooltip title="Answer">
                                 <ShortcutOutlined />
@@ -168,14 +168,14 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
                 <ContainerDesc>
                     {message?.fileImg && (
                         <ContainerImg>
-                            <ImgMessage src={message.fileImg}/>
+                            <ImgMessage src={message?.fileImg}/>
                             <ContainerOpenImage>
                                 <IconButton onClick={() => setOpen(true)}>
                                     <ZoomInOutlined/>
                                 </IconButton>
                                 <ImageZoom
                                     open={open}
-                                    img={message.fileImg}
+                                    img={message?.fileImg}
                                     onClick={() => setOpen(false)}
                                     setOpen={setOpen}
                                 />
@@ -183,7 +183,7 @@ const Message = ({ type, message, setOpenMessage, count, openMessage }) => {
                         </ContainerImg>
                     )}
                     <ContainerText>
-                        {getText(message.desc)}
+                        {getText(message?.desc)}
                     </ContainerText>
                 </ContainerDesc>
             </ContainerMessage>
