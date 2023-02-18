@@ -8,6 +8,9 @@ export const AuthContextProvider = ({ children }) => {
         JSON.parse(sessionStorage.getItem("user")) || null
     );
     const [answer, setAnswer] = useState(null);
+    const [themeId, setThemeId] = useState('');
+    const [openMessage, setOpenMessage] = useState([]);
+
     const login = async (data) => {
         await publicRequest.post("auth/login", data, {
             withCredentials: true
@@ -29,6 +32,10 @@ export const AuthContextProvider = ({ children }) => {
             setCurrentUser,
             answer,
             setAnswer,
+            themeId,
+            setThemeId,
+            openMessage,
+            setOpenMessage,
             login,
             logout
         }}>

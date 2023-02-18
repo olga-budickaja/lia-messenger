@@ -41,36 +41,12 @@ const WriteMessage = () => {
     }
     const formats = ['bold', 'italic', 'link', 'code-block'];
 
-    // const resizeFile = (file) =>
-    //     new Promise((resolve) => {
-    //         Resizer.imageFileResizer(
-    //             file,
-    //             320,
-    //             240,
-    //             "JPEG",
-    //             100,
-    //             0,
-    //             (uri) => {
-    //                 resolve(uri);
-    //             },
-    //             "base64"
-    //         );
-    //     });
-
-    // const onCropEnd = () => {
-    //     setIsCropped(true)
-    // }
     const uploadFile = (file, fileType) => {
         const storage = getStorage(app);
         const fileName = new Date().getTime() + file.name;
         const storageRef = ref(storage, fileName);
 
         const uploadTask = uploadBytesResumable(storageRef, file)
-
-        // filetype === "fileImg"
-        //     ? const uploadTask =
-        //     : const uploadTask = uploadBytesResumable(storageRef, file);
-
 
         uploadTask.on('state_changed',
             (snapshot) => {
@@ -130,7 +106,6 @@ const WriteMessage = () => {
                     ...inputs,
                     desc: value,
                     homepage,
-                    themeId: answer,
                     createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
                 });
                 navigate("/");

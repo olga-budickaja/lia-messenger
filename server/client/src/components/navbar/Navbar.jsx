@@ -1,6 +1,6 @@
 import { Box, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
-import { AccountCircle, SearchOutlined } from "@mui/icons-material";
-import { Search, SearchIconWrapper, StyledInputBase, NavbarBg } from "./navbarStyle";
+import { AccountCircle } from "@mui/icons-material";
+import { NavbarBg } from "./navbarStyle";
 import { useContext, useState } from "react";
 import { Logo, LogoContainer, Name, Span, Title } from "./navbarStyled";
 import logo from "../../assets/logo.png";
@@ -87,15 +87,6 @@ const Navbar = () => {
                                 </Box>
                             </LogoContainer>
                         </Link>
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchOutlined />
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </Search>
                         <Box sx={{ flexGrow: 1 }} />
                         <Box>
                             {currentUser === null

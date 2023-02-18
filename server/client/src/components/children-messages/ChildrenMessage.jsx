@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { publicRequest } from "../../requestMethod";
-import Message from "../messages/Message";
+import Message from "../message/Message";
 
 const ChildrenMessage = ({message, type}) => {
    const [childrenMessages, setChildrenMessages] = useState([]);

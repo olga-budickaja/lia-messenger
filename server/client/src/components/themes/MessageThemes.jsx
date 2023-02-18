@@ -2,23 +2,14 @@ import { Container, NoMessages, PaginationContainer } from "./themesStyle";
 import Messages from "../messages/Messages";
 import { useQuery } from "@tanstack/react-query";
 import { publicRequest } from "../../requestMethod";
-import { ButtonNew } from "../messages/messagesStyle";
-import { Pagination, Stack, Tooltip } from "@mui/material";
-import { ColorRoundButton } from "../../ui/muiStyle";
-import {
-    AddOutlined,
-    CalendarMonthOutlined,
-    ImportExportOutlined,
-    TextRotateVerticalOutlined
-} from "@mui/icons-material";
-import { Link as RouterLink } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { Pagination, Stack } from "@mui/material";
+import { useEffect, useState } from "react";
 import SortMessages from "../sorts/SortMessages";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import ButtonWriteMessage from "../button-write-message/ButtonWriteMessage";
+import { items } from "../../dataApp";
 
 const MessageThemes = () => {
-    const { currentUser } = useContext(AuthContext);
     const [themes, setThemes] = useState([]);
     const [sortName, setSortName] = useState('');
 
@@ -29,19 +20,13 @@ const MessageThemes = () => {
     );
 
     useEffect(() => {
-        const sortsData = async () => {
             if (data) {
                 setThemes(data?.data)
+                themes.sort((t1, t2) => {
+                    return new Date(t2.createAt) - new Date(t1.createAt)
+                })
             }
-        }
-        sortsData()
-    }, [data?.data]);
-
-    const items = [
-        {name: 'username', title: 'Sort by username', icon: <TextRotateVerticalOutlined />},
-        {name: 'email', title: 'Sort by email', icon: <ImportExportOutlined />},
-        {name: 'createAt', title: 'Sort by date', icon: <CalendarMonthOutlined />},
-    ];
+    }, [data]);
 
     const sortMessageName = (sort) => {
         setSortName(sort);
@@ -79,19 +64,7 @@ const MessageThemes = () => {
                     </>
                 )
             }
-            <ButtonNew>
-                <Tooltip title="Add new theme">
-                    <ColorRoundButton
-                        component={RouterLink}
-                        to={currentUser === null
-                            ? "registration"
-                            : "write"
-                        }
-                    >
-                        <AddOutlined />
-                    </ColorRoundButton>
-                </Tooltip>
-            </ButtonNew>
+            <ButtonWriteMessage />
             <PaginationContainer>
                 <Stack spacing={2}>
                     <Pagination count={themes?.endingLink} variant="outlined" />

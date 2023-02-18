@@ -1,17 +1,23 @@
 import {
-    ContainerMessage,
-    ContainerMessages,
+    Container,
 } from "./messagesStyle";
 import { useEffect, useRef, useState } from "react";
-import Message from "./Message";
+import Message from "../message/Message";
 import { publicRequest } from "../../requestMethod";
+import { ContainerScroll } from "../message/messageStyle";
 
 
 const Messages = ({ message }) => {
     const [childrenMessages, setChildrenMessages] = useState([]);
-    const [openMessage, setOpenMessage] = useState(false);
-    const themeId = message?.id;
+    const [themeId, setThemeId] = useState(0);
     const scrollRef = useRef();
+    const [openMessage, setOpenMessage] = useState(false);
+
+    const userId = message?.userId
+
+    useEffect(() => {
+        setThemeId(message?.id)
+    }, [message?.id])
 
     useEffect(() => {
         try {
@@ -27,32 +33,33 @@ const Messages = ({ message }) => {
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({behavior: "smooth"});
-    }, [childrenMessages])
+    }, [childrenMessages]);
 
     return (
         <>
-            <ContainerMessages>
+            <Container>
                 <Message
-                    type="rcv"
                     message={message}
-                    setOpenMessage={setOpenMessage}
-                    openMessage={openMessage}
-                    count={childrenMessages?.length}
                     themeId={themeId}
+                    count={childrenMessages?.length}
+                    userId={userId}
+                    type="main"
+                    openMessage={openMessage}
+                    setOpenMessage={setOpenMessage}
                 />
-            </ContainerMessages>
+            </Container>
             {openMessage && (
-                <ContainerMessage>
+                <Container>
                     {childrenMessages.map(child => (
-                        <div ref={scrollRef} key={child?.id}>
+                        <ContainerScroll type="rcv" ref={scrollRef} key={child?.id}>
                             <Message
-                                type=""
                                 message={child}
+                                type="rcv"
                             />
-                        </div>
+                        </ContainerScroll>
 
                     ))}
-                </ContainerMessage>
+                </Container>
             )}
 
         </>
