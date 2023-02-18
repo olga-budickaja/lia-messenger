@@ -22,7 +22,7 @@ const MessageThemes = () => {
     useEffect(() => {
             if (data) {
                 setThemes(data?.data)
-                themes.sort((t1, t2) => {
+                themes?.sort((t1, t2) => {
                     return new Date(t2.createAt) - new Date(t1.createAt)
                 })
             }

@@ -101,7 +101,7 @@ const ButtonsMessage = ({type, message, count, openMessage, setOpenMessage, page
                     <ShortcutOutlined />
                 </Tooltip>
             </IconButton>
-            {currentUser.username === message.username && (
+            {currentUser?.username === message?.username && (
                 <IconButton onClick={handleDelete}>
                     <Tooltip title="Delete message">
                         <RemoveCircleOutlineOutlined sx={{ fill: "#e91e63" }}/>
