@@ -11,14 +11,14 @@ function App() {
 
     const queryClient = new QueryClient()
 
-  return (
-    <QueryClientProvider client={queryClient}>
-        <Navbar />
-        <Container maxWidth="md" sx={{ minHeight: 'calc(100vh - 75px)' }}>
-            <AppRouter />
-        </Container>
-    </QueryClientProvider>
-  );
+      return (
+        <QueryClientProvider client={queryClient}>
+            <Navbar />
+            <Container maxWidth="md" sx={{ minHeight: 'calc(100vh - 75px)' }}>
+                <AppRouter />
+            </Container>
+        </QueryClientProvider>
+      );
 }
 
 export default App;

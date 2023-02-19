@@ -49,7 +49,7 @@ const MessageThemes = () => {
                                 ? "Something went wrong!"
                                 : isLoading
                                     ? "Loading..."
-                                    : themes.map((message) =>
+                                    : themes?.map((message) =>
                                         <CSSTransition
                                             timeout={500}
                                             classNames="message"

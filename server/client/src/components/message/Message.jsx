@@ -13,40 +13,29 @@ import avatar2 from "../../assets/avatar2.png";
 import { Box, IconButton } from "@mui/material";
 import { ZoomInOutlined } from "@mui/icons-material";
 import ImageZoom from "../messages/ImageZoom";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { publicRequest } from "../../requestMethod";
 import moment from "moment";
-import { io } from "socket.io-client";
 import ButtonsMessage from "../buttons-message/ButtonsMessage";
+import { SocketContext } from "../../context/SocketContext";
 
-const Message = ({ type, message, count, userId, openMessage, setOpenMessage, page }) => {
-
+const Message = ({ type, message, count, page, userId }) => {
+    const { socket } = useContext(SocketContext);
     const [open, setOpen] = useState(false);
     const [conversations, setConversations] = useState([]);
-    const [userIdSocket, setUserIdSocket] = useState('');
-    const socket = useRef(io("ws://localhost:8900"));
-
-    const userIdConv = message?.uid;
+    const [arrivalMessage, setArrivalMessage] = useState(null);
 
     useEffect(() => {
-        if (userIdConv && userId === '' || (userId === null)) {
-            setUserIdSocket(userIdConv);
-        } else if (!message?.uid && (userId && userIdConv === null || userIdConv === '')) {
-            setUserIdSocket(userId);
-        }
-    }, [userId, userIdConv]);
-
-    useEffect(() => {
-        socket.current.emit("addUser", userIdSocket);
+        socket.current.emit("addUser", (!userId ? message?.uid : userId));
         socket.current.on("getUsers", users => {
             console.log(users)
         });
-    }, [userId]);
+    }, [message]);
 
     useEffect(() => {
         try {
             const fetchConversations = async () => {
-                const res = await publicRequest.get(`/conversations/${userIdConv}`);
+                const res = await publicRequest.get(`/conversations/${userId}`);
                 setConversations(res.data);
             }
             fetchConversations()
@@ -55,6 +44,20 @@ const Message = ({ type, message, count, userId, openMessage, setOpenMessage, pa
         }
 
     }, [userId]);
+
+    useEffect(() => {
+        arrivalMessage && conversations.includes(arrivalMessage.sender)
+    }, [arrivalMessage])
+
+
+    useEffect(() => {
+        socket.current.on("getMessage", data => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text
+            });
+        });
+    }, [])
 
     const getText = (html) => {
         const doc = new DOMParser().parseFromString(html, "text/html");
@@ -89,8 +92,6 @@ const Message = ({ type, message, count, userId, openMessage, setOpenMessage, pa
                             count={count}
                             type={type}
                             message={message}
-                            openMessage={openMessage}
-                            setOpenMessage={setOpenMessage}
                             page={page}
                         />
                     </ContainerButton>

@@ -18,11 +18,16 @@ import moment from "moment";
 import { CancelOutlined } from "@mui/icons-material";
 import "cropperjs/dist/cropper.css";
 import { useNavigate } from "react-router-dom";
+import { SocketContext } from "../../context/SocketContext";
+import { MessageContext } from "../../context/MessageContext";
 import { AuthContext } from "../../context/AuthContext";
 
 const WriteMessage = () => {
-    const { answer, setAnswer } = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
+    const { socket } = useContext(SocketContext);
+    const { answer, setAnswer, theme, setTheme } = useContext(MessageContext);
     const [value, setValue] = useState('');
+    const [userId, setUserId] = useState('');
     const [img, setImg] = useState(undefined);
     const [imgLink, setImgLink] = useState(undefined);
     const [txt, setTxt] = useState(undefined);
@@ -33,6 +38,19 @@ const WriteMessage = () => {
     const [errorFileSize, setErrorFileSize] = useState('');
     const [errorImgSize, setErrorImgSize] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        try {
+            const fetchConversations = async () => {
+                const res = await publicRequest.get(`/users?username=${currentUser.username}`);
+                setUserId(res.data[0].id);
+            }
+            fetchConversations()
+        } catch (e) {
+            console.log(e)
+        }
+
+    }, [currentUser]);
 
     const modules = {
         toolbar: [
@@ -100,8 +118,21 @@ const WriteMessage = () => {
 
     const handleUpload = async (e) => {
         e.preventDefault();
+
+
+        socket.current.emit("sendMessage", {
+            senderId: userId,
+            receiverId: answer ? answer : null,
+            text: {
+                ...inputs,
+                desc: value,
+                homepage,
+                createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
+            }
+        });
+
         try {
-            if (!answer) {
+            if (answer === null) {
                 await publicRequest.post("themes", {
                     ...inputs,
                     desc: value,
@@ -109,22 +140,26 @@ const WriteMessage = () => {
                     createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
                 });
                 navigate("/");
-            } else {
+            } else if (answer) {
                 await publicRequest.post("messages", {
                     ...inputs,
                     desc: value,
-                    themeId: answer,
+                    themeId: theme,
+                    answerId: answer,
                     homepage,
                     createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
                 });
-                navigate(`/message/${answer}`);
+                navigate(`/`);
                 setAnswer(null);
+                setTheme(null)
             }
 
         } catch (e) {
             console.log(e)
         }
     }
+
+
     const handleClose = () => {
         setImg(undefined);
         deleteImgFromStorage(imgLink);

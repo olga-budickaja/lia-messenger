@@ -41,11 +41,15 @@ export const ContainerPreview = styled.div`
   padding: 0 20px 10px 20px;
   width: 320px;
   height: 240px;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
 `;
 export const ImgPreview= styled.img`
   width: 100%;
   height: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: contain;
+  border-radius: 5px;
 `;
 export const ContainerButton = styled.div`
   display: flex;

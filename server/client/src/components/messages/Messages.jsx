@@ -11,7 +11,6 @@ const Messages = ({ message }) => {
     const [childrenMessages, setChildrenMessages] = useState([]);
     const [themeId, setThemeId] = useState(0);
     const scrollRef = useRef();
-    const [openMessage, setOpenMessage] = useState(false);
 
     const userId = message?.userId
 
@@ -44,24 +43,19 @@ const Messages = ({ message }) => {
                     count={childrenMessages?.length}
                     userId={userId}
                     type="main"
-                    openMessage={openMessage}
-                    setOpenMessage={setOpenMessage}
                 />
             </Container>
-            {openMessage && (
-                <Container>
-                    {childrenMessages.map(child => (
-                        <ContainerScroll type="rcv" ref={scrollRef} key={child?.id}>
-                            <Message
-                                message={child}
-                                type="rcv"
-                            />
-                        </ContainerScroll>
+            <Container>
+                {childrenMessages?.map(child => (
+                    <ContainerScroll type="rcv" ref={scrollRef} key={child?.id}>
+                        <Message
+                            message={child}
+                            type="rcv"
+                        />
+                    </ContainerScroll>
 
-                    ))}
-                </Container>
-            )}
-
+                ))}
+            </Container>
         </>
     );
 };

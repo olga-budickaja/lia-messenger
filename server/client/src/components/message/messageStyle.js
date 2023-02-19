@@ -72,8 +72,10 @@ export const ContainerText = styled.div`
 export const ImgMessage = styled.img`
   width: 100%;
   object-fit: contain;
+  aspect-ratio: 4 / 3;
   height: auto;
   border-radius: 8px;
+  border: 1px solid lightgrey;
 `;
 export const EmailButton = styled.div`
   display: flex;

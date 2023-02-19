@@ -50,7 +50,7 @@ export const addMess = (req, res) => {
     jwt.verify(token, process.env.JWT_KEY, (err, userInfo) => {
         if ( err ) return res.status(403).json({ message: "Token is not valid!" });
 
-        const q = "INSERT INTO messages (`desc`, `fileImg`, `fileTxt`, `uid`, `memId`, `themeId`, `homepage`, `createAt`) VALUES (?)";
+        const q = "INSERT INTO messages (`desc`, `fileImg`, `fileTxt`, `uid`, `memId`, `themeId`, `homepage`, `createAt`, `answerId`) VALUES (?)";
 
         const values = [
             req.body.desc,
@@ -60,7 +60,8 @@ export const addMess = (req, res) => {
             req.body.memId,
             req.body.themeId,
             req.body.homepage,
-            req.body.createAt
+            req.body.createAt,
+            req.body.answerId
         ]
 
         db.query(q, [values], (err, data) => {

@@ -11,12 +11,14 @@ import { AuthContext } from "../../context/AuthContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { publicRequest } from "../../requestMethod";
 import styled from "@emotion/styled";
+import { MessageContext } from "../../context/MessageContext";
 
 const Span = styled.span`
     color: var(--color-light-text);
 `;
-const ButtonsMessage = ({type, message, count, openMessage, setOpenMessage, page}) => {
-    const { currentUser, setAnswer } = useContext(AuthContext);
+const ButtonsMessage = ({type, message, count, page}) => {
+    const { currentUser } = useContext(AuthContext);
+    const { setAnswer, setTheme, theme } = useContext(MessageContext);
     const queryClient = useQueryClient();
 
     const deleteMutation = useMutation(
@@ -40,13 +42,18 @@ const ButtonsMessage = ({type, message, count, openMessage, setOpenMessage, page
     const handleDelete = () => {
         deleteMutation.mutate(message?.id);
     };
+    // console.log(message.themeId)
+    const handleAnswer = () => {
+        setAnswer(message?.id);
+        !message?.themeId ?  setTheme(message?.id) : setTheme(message?.themeId);
+    }
+
+    console.log(theme)
 
     return (
         <>
             {type === "main" && count !== 0 && !page ? (
-                <IconButton
-                    onClick={() => setOpenMessage(!openMessage)}
-                >
+                <IconButton>
                     <Tooltip title="Read comments">
                         <Badge badgeContent={count} color="success">
                             <QuestionAnswerOutlined />
@@ -95,7 +102,7 @@ const ButtonsMessage = ({type, message, count, openMessage, setOpenMessage, page
                 component={RouterLink}
                 to={currentUser === null ? "/registration" : "/write"}
                 answer={message?.id}
-                onClick={() => setAnswer(message?.id)}
+                onClick={handleAnswer}
             >
                 <Tooltip title="Answer">
                     <ShortcutOutlined />
