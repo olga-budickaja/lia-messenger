@@ -60,9 +60,10 @@ export const deleteTheme = (req, res) => {
         const q = "DELETE FROM themes WHERE `id` = ? AND `userId` = ?"
 
         db.query(q, [req.params.id, userInfo.id], (err, data) => {
-            if (err) return res.status(403).json({ message: "You can delete only your message!" });
+            if (err) return res.status(500).json(err);
 
-            return res.status(200).json({ message: "Message has been deleted." });
+            if (data.affectedRows > 0) return res.status(200).json({ message: "Message has been deleted." });
+            return res.status(403).json({ message: "You can delete only your message!" });
         })
     });
 }

@@ -18,37 +18,34 @@ const Span = styled.span`
 `;
 const ButtonsMessage = ({type, message, count, page}) => {
     const { currentUser } = useContext(AuthContext);
-    const { setAnswer, setTheme, theme } = useContext(MessageContext);
+    const { setAnswer, setTheme } = useContext(MessageContext);
     const queryClient = useQueryClient();
 
     const deleteMutation = useMutation(
         (messageId) => {
-            if (type === "main" ) {
-                return publicRequest.delete(`themes/${messageId}`)
+            if (!message?.themeId) {
+                return publicRequest.delete(`themes/${messageId}`) &&
+                window.location.reload();
             } else {
-                return publicRequest.delete(`messages/${messageId}`)
+                return publicRequest.delete(`messages/${messageId}`) &&
+                    window.location.reload();
             }
         },
         {
             onSuccess: () => {
-                if (type === "main") {
-
-                } else {
-                    queryClient.invalidateQueries(["messages"])
-                }
+                queryClient.invalidateQueries(["messages"])
             }
         }
+
     );
     const handleDelete = () => {
         deleteMutation.mutate(message?.id);
     };
-    // console.log(message.themeId)
+
     const handleAnswer = () => {
         setAnswer(message?.id);
         !message?.themeId ?  setTheme(message?.id) : setTheme(message?.themeId);
     }
-
-    console.log(theme)
 
     return (
         <>
@@ -61,7 +58,7 @@ const ButtonsMessage = ({type, message, count, page}) => {
                     </Tooltip>
                 </IconButton>
             ) : (
-                count !== 0 && type !== "snd" && type !== "own" && (
+                count !== 0 && type !== "rcv" && type !== "own" && (
                     <Span>{count} messages</Span>
                 )
             )

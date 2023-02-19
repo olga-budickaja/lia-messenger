@@ -5,7 +5,7 @@ export const addUser = (req, res) => {
 }
 export const getUser = (req, res) => {
     const q = req.query.username
-        ? `SELECT u.id FROM messages AS m JOIN users AS u ON (u.id = m.uid) WHERE u.username = ?`
+        ? `SELECT u.id FROM users AS u WHERE u.username = ?`
         : `SELECT * FROM users`
 
     db.query(q, [req.query.username], (err, data) => {

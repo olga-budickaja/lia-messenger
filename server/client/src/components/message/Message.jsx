@@ -14,50 +14,26 @@ import { Box, IconButton } from "@mui/material";
 import { ZoomInOutlined } from "@mui/icons-material";
 import ImageZoom from "../messages/ImageZoom";
 import { useContext, useEffect, useState } from "react";
-import { publicRequest } from "../../requestMethod";
 import moment from "moment";
 import ButtonsMessage from "../buttons-message/ButtonsMessage";
 import { SocketContext } from "../../context/SocketContext";
 
-const Message = ({ type, message, count, page, userId }) => {
+const Message = ({ type, message, count, page, userIdMessage }) => {
     const { socket } = useContext(SocketContext);
     const [open, setOpen] = useState(false);
-    const [conversations, setConversations] = useState([]);
-    const [arrivalMessage, setArrivalMessage] = useState(null);
+
+
 
     useEffect(() => {
-        socket.current.emit("addUser", (!userId ? message?.uid : userId));
+        socket.current.emit("addUser", (!userIdMessage ? message?.uid : userIdMessage));
         socket.current.on("getUsers", users => {
             console.log(users)
         });
     }, [message]);
 
-    useEffect(() => {
-        try {
-            const fetchConversations = async () => {
-                const res = await publicRequest.get(`/conversations/${userId}`);
-                setConversations(res.data);
-            }
-            fetchConversations()
-        } catch (e) {
-            console.log(e)
-        }
-
-    }, [userId]);
-
-    useEffect(() => {
-        arrivalMessage && conversations.includes(arrivalMessage.sender)
-    }, [arrivalMessage])
-
-
-    useEffect(() => {
-        socket.current.on("getMessage", data => {
-            setArrivalMessage({
-                sender: data.senderId,
-                text: data.text
-            });
-        });
-    }, [])
+    // useEffect(() => {
+    //     setMessageUid(message?.uid)
+    // }, [message?.uid])
 
     const getText = (html) => {
         const doc = new DOMParser().parseFromString(html, "text/html");

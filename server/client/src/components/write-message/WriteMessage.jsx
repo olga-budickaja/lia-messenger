@@ -23,11 +23,10 @@ import { MessageContext } from "../../context/MessageContext";
 import { AuthContext } from "../../context/AuthContext";
 
 const WriteMessage = () => {
-    const { currentUser } = useContext(AuthContext);
+    const { userId } = useContext(AuthContext);
     const { socket } = useContext(SocketContext);
-    const { answer, setAnswer, theme, setTheme } = useContext(MessageContext);
+    const { answer, setAnswer, theme, setTheme, setArrivalMessage } = useContext(MessageContext);
     const [value, setValue] = useState('');
-    const [userId, setUserId] = useState('');
     const [img, setImg] = useState(undefined);
     const [imgLink, setImgLink] = useState(undefined);
     const [txt, setTxt] = useState(undefined);
@@ -38,19 +37,6 @@ const WriteMessage = () => {
     const [errorFileSize, setErrorFileSize] = useState('');
     const [errorImgSize, setErrorImgSize] = useState('');
     const navigate = useNavigate();
-
-    useEffect(() => {
-        try {
-            const fetchConversations = async () => {
-                const res = await publicRequest.get(`/users?username=${currentUser.username}`);
-                setUserId(res.data[0].id);
-            }
-            fetchConversations()
-        } catch (e) {
-            console.log(e)
-        }
-
-    }, [currentUser]);
 
     const modules = {
         toolbar: [
@@ -116,6 +102,16 @@ const WriteMessage = () => {
             : setErrorFileSize("") && uploadFile(txt, "fileTxt")
     }, [txt]);
 
+
+    useEffect(() => {
+        socket.current.on("getMessage", data => {
+            setArrivalMessage({
+                desc: data.text,
+                createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
+            });
+        });
+    }, [])
+
     const handleUpload = async (e) => {
         e.preventDefault();
 
@@ -123,13 +119,9 @@ const WriteMessage = () => {
         socket.current.emit("sendMessage", {
             senderId: userId,
             receiverId: answer ? answer : null,
-            text: {
-                ...inputs,
-                desc: value,
-                homepage,
-                createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
-            }
+            text: value
         });
+
 
         try {
             if (answer === null) {
@@ -138,6 +130,9 @@ const WriteMessage = () => {
                     desc: value,
                     homepage,
                     createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
+                });
+                await publicRequest.post("conversations", {
+                    senderId: userId,
                 });
                 navigate("/");
             } else if (answer) {
@@ -149,6 +144,10 @@ const WriteMessage = () => {
                     homepage,
                     createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")
                 });
+                await publicRequest.post("conversations", {
+                    senderId: userId,
+                    receiverId: answer,
+                });
                 navigate(`/`);
                 setAnswer(null);
                 setTheme(null)
@@ -158,6 +157,8 @@ const WriteMessage = () => {
             console.log(e)
         }
     }
+
+
 
 
     const handleClose = () => {

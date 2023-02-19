@@ -5,7 +5,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-self: ${(props) => props.type === "own" ? 'flex-start' : 'flex-end'};
-  width: ${(props) => props.type === "main" ? '100%' : '85%'};
+  width: ${(props) => props.type === "main" ? '100%' : '80%'};
+  margin-left: ${(props) => props.type === "main" ? '0' : '10%'};
   * {
     color: var(--color-text);
   }
@@ -53,6 +54,7 @@ export const Span = styled.span`
 export const ContainerDesc = styled.div`
   display: flex;
   margin: 20px 0;
+  padding: 0 15px;
   gap: 20px;
 `;
 export const ContainerImg = styled.div`

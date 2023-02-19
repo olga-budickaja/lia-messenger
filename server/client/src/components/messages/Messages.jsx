@@ -1,18 +1,21 @@
 import {
     Container,
 } from "./messagesStyle";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Message from "../message/Message";
 import { publicRequest } from "../../requestMethod";
 import { ContainerScroll } from "../message/messageStyle";
+import { AuthContext } from "../../context/AuthContext";
 
 
 const Messages = ({ message }) => {
+    const { userId } = useContext(AuthContext);
     const [childrenMessages, setChildrenMessages] = useState([]);
+    const [conversations, setConversations] = useState([]);
     const [themeId, setThemeId] = useState(0);
     const scrollRef = useRef();
 
-    const userId = message?.userId
+    const userIdMessage = message?.userId
 
     useEffect(() => {
         setThemeId(message?.id)
@@ -31,6 +34,19 @@ const Messages = ({ message }) => {
     }, [themeId]);
 
     useEffect(() => {
+        try {
+            const fetchConversations = async () => {
+                const res = await publicRequest.get(`/conversations/${message?.userId}`);
+                setConversations(res.data[0]);
+            }
+            fetchConversations()
+        } catch (e) {
+            console.log(e)
+        }
+
+    }, [userId]);
+
+    useEffect(() => {
         scrollRef.current?.scrollIntoView({behavior: "smooth"});
     }, [childrenMessages]);
 
@@ -41,16 +57,22 @@ const Messages = ({ message }) => {
                     message={message}
                     themeId={themeId}
                     count={childrenMessages?.length}
-                    userId={userId}
+                    userIdMessage={userIdMessage}
                     type="main"
+                    conversations={conversations}
                 />
             </Container>
             <Container>
                 {childrenMessages?.map(child => (
-                    <ContainerScroll type="rcv" ref={scrollRef} key={child?.id}>
+                    <ContainerScroll
+                        type={child?.answerId === message?.id || child?.uid === userId ? "rcv" : "own"}
+                        ref={scrollRef}
+                        key={child?.id}
+                    >
                         <Message
                             message={child}
-                            type="rcv"
+                            type={child?.answerId === message?.id || child?.uid === userId ? "rcv" : "own"}
+                            conversations={conversations}
                         />
                     </ContainerScroll>
 
