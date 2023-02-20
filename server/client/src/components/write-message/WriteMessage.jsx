@@ -104,7 +104,7 @@ const WriteMessage = () => {
 
 
     useEffect(() => {
-        socket.current.on("getMessage", data => {
+        socket.current?.on("getMessage", data => {
             setArrivalMessage({
                 desc: data.text,
                 createAt: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss")

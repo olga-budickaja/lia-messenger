@@ -16,7 +16,7 @@ import { MessageContext } from "../../context/MessageContext";
 const Span = styled.span`
     color: var(--color-light-text);
 `;
-const ButtonsMessage = ({type, message, count, page}) => {
+const ButtonsMessage = ({type, message, count, page, openMessages, setOpenMessages}) => {
     const { currentUser } = useContext(AuthContext);
     const { setAnswer, setTheme } = useContext(MessageContext);
     const queryClient = useQueryClient();
@@ -50,7 +50,7 @@ const ButtonsMessage = ({type, message, count, page}) => {
     return (
         <>
             {type === "main" && count !== 0 && !page ? (
-                <IconButton>
+                <IconButton onClick={() => setOpenMessages(!openMessages)}>
                     <Tooltip title="Read comments">
                         <Badge badgeContent={count} color="success">
                             <QuestionAnswerOutlined />

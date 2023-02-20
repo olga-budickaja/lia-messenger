@@ -18,7 +18,7 @@ import moment from "moment";
 import ButtonsMessage from "../buttons-message/ButtonsMessage";
 import { SocketContext } from "../../context/SocketContext";
 
-const Message = ({ type, message, count, page, userIdMessage }) => {
+const Message = ({ type, message, count, page, userIdMessage, openMessages, setOpenMessages }) => {
     const { socket } = useContext(SocketContext);
     const [open, setOpen] = useState(false);
 
@@ -30,10 +30,6 @@ const Message = ({ type, message, count, page, userIdMessage }) => {
             console.log(users)
         });
     }, [message]);
-
-    // useEffect(() => {
-    //     setMessageUid(message?.uid)
-    // }, [message?.uid])
 
     const getText = (html) => {
         const doc = new DOMParser().parseFromString(html, "text/html");
@@ -69,6 +65,8 @@ const Message = ({ type, message, count, page, userIdMessage }) => {
                             type={type}
                             message={message}
                             page={page}
+                            openMessages={openMessages}
+                            setOpenMessages={setOpenMessages}
                         />
                     </ContainerButton>
                 </ContainerTitle>

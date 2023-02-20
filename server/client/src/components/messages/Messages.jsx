@@ -13,6 +13,7 @@ const Messages = ({ message }) => {
     const [childrenMessages, setChildrenMessages] = useState([]);
     const [conversations, setConversations] = useState([]);
     const [themeId, setThemeId] = useState(0);
+    const [openMessages, setOpenMessages] = useState(false);
     const scrollRef = useRef();
 
     const userIdMessage = message?.userId
@@ -60,24 +61,29 @@ const Messages = ({ message }) => {
                     userIdMessage={userIdMessage}
                     type="main"
                     conversations={conversations}
+                    openMessages={openMessages}
+                    setOpenMessages={setOpenMessages}
                 />
             </Container>
-            <Container>
-                {childrenMessages?.map(child => (
-                    <ContainerScroll
-                        type={child?.answerId === message?.id || child?.uid === userId ? "rcv" : "own"}
-                        ref={scrollRef}
-                        key={child?.id}
-                    >
-                        <Message
-                            message={child}
+            {openMessages && (
+                <Container>
+                    {childrenMessages?.map(child => (
+                        <ContainerScroll
                             type={child?.answerId === message?.id || child?.uid === userId ? "rcv" : "own"}
-                            conversations={conversations}
-                        />
-                    </ContainerScroll>
+                            ref={scrollRef}
+                            key={child?.id}
+                        >
+                            <Message
+                                message={child}
+                                type={child?.answerId === message?.id || child?.uid === userId ? "rcv" : "own"}
+                                conversations={conversations}
+                            />
+                        </ContainerScroll>
 
-                ))}
-            </Container>
+                    ))}
+                </Container>
+            )}
+
         </>
     );
 };
