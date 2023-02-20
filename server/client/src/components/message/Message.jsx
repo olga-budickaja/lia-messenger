@@ -31,9 +31,8 @@ const Message = ({ type, message, count, page, userIdMessage, openMessages, setO
         });
     }, [message]);
 
-    const getText = (html) => {
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        return doc.body.textContent
+    const getText = () => {
+        return {__html: `${message?.desc}`}
     }
 
     const parseDate = (createDate) => {
@@ -88,9 +87,7 @@ const Message = ({ type, message, count, page, userIdMessage, openMessages, setO
                             </ContainerOpenImage>
                         </ContainerImg>
                     )}
-                    <ContainerText>
-                        {getText(message?.desc)}
-                    </ContainerText>
+                    <ContainerText dangerouslySetInnerHTML={getText()} />
                 </ContainerDesc>
             </ContainerMessage>
         </Container>

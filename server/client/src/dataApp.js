@@ -5,3 +5,6 @@ export const items = [
     {name: 'email', title: 'Sort by email', icon: <ImportExportOutlined />},
     {name: 'createAt', title: 'Sort by date', icon: <CalendarMonthOutlined />},
 ];
+export const imgResize = [
+    { src: '' }
+]

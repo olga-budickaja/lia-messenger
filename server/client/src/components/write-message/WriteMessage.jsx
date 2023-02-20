@@ -9,7 +9,7 @@ import {
     ErrorText, ContainerPreview, ImgPreview,
 } from "./writteMessageStyle";
 import ReactQuill from "react-quill";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CloseButton, ColorButton } from "../../ui/muiStyle";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import app from "../../firebase";
@@ -37,6 +37,7 @@ const WriteMessage = () => {
     const [errorFileSize, setErrorFileSize] = useState('');
     const [errorImgSize, setErrorImgSize] = useState('');
     const navigate = useNavigate();
+
 
     const modules = {
         toolbar: [
@@ -72,6 +73,7 @@ const WriteMessage = () => {
             () => {
                 // Upload completed successfully, now we can get the download URL
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setImgLink(downloadURL)
                     setInputs((prev) => {
                         return { ...prev, [fileType]: downloadURL }
                     });
@@ -79,6 +81,7 @@ const WriteMessage = () => {
             }
         );
     };
+
     const deleteImgFromStorage = (img) => {
         const storage = getStorage();
         const desertRef = ref(storage, `/${img}`);
@@ -90,16 +93,40 @@ const WriteMessage = () => {
             });
     }
 
+
     useEffect(() => {
-        img && uploadFile(img, "fileImg");
-    }, [img])
+        if (img) {
+            uploadFile(img, "fileImg");
+            try {
+                const canvas = document.getElementById('imgCanvas');
+                const ctx = canvas.getContext('2d');
+                const newImg = new Image();
+                newImg.src = imgLink;
+
+                newImg.onload = () => {
+                    const w = newImg.naturalWidth / (newImg.naturalWidth / 320);
+                    const h = 320 / newImg.naturalWidth * newImg.naturalHeight;
+                    if (newImg.naturalWidth !== 320) {
+                        ctx.drawImage(newImg, -Math.abs(w - 320) / 2, -Math.abs(h - 240) / 2, w , h);
+                    }
+                }
+                // uploadFile(newImg, "fileImg");
+                // deleteImgFromStorage(imgLink);
+                // setNewImg(undefined);
+            } catch (e) {
+                console.log(e)
+            }
+
+        }
+
+    }, [img]);
 
 
     useEffect(() => {
-        txt && uploadFile(txt, "fileTxt");
-        txt && txt > 100 * 1024
-            ? setErrorFileSize("large file size!") && deleteImgFromStorage(imgLink)
-            : setErrorFileSize("") && uploadFile(txt, "fileTxt")
+        txt && txt?.size > 100 * 1024 &&
+            setErrorFileSize("large file size!") &&
+            deleteImgFromStorage(imgLink);
+        txt && uploadFile(txt, "fileTxt") && setErrorFileSize("");
     }, [txt]);
 
 
@@ -114,7 +141,6 @@ const WriteMessage = () => {
 
     const handleUpload = async (e) => {
         e.preventDefault();
-
 
         socket.current.emit("sendMessage", {
             senderId: userId,
@@ -158,9 +184,6 @@ const WriteMessage = () => {
         }
     }
 
-
-
-
     const handleClose = () => {
         setImg(undefined);
         deleteImgFromStorage(imgLink);
@@ -190,13 +213,17 @@ const WriteMessage = () => {
             />
             <Label>Upload image:</Label>
             <Qualification>(size 320x240px)</Qualification>
+            <div style={{ width: '320px', height: '240px' }}>
+                <canvas id="imgCanvas" width="320" height="240" />
+            </div>
             {imgPrc > 0
-                ? ("Uploading:" + imgPrc + "%"
+                ? ( "Uploading:" + imgPrc + "%"
                 ) : (
                     <Input
                         type="file"
                         accept=".jpeg,.png,.gif"
                         onChange={e => setImg(e.target.files[0])}
+
                     />
                 )}
             {(img && !errorImgSize) ? (
