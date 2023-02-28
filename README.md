@@ -96,3 +96,118 @@ Click on all buttons. All work.<br> Enjoy watching ☺️</p><br>
         </th>
     </tr>    
 </table>
+
+<h2 align="center">How to run a project locally on your computer</h2>
+
+
+<ol>
+<li>Create a MySQL database with schema in directory: mysql-db/db.sql</li>
+<li>
+Create a folder. Open it up in the code editor. And type in the terminal at for example :E\...\my-folder
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>git init</code>
+</pre>
+</div>
+</li>
+<li>
+Copy this repository to your project. Enter the command in the terminal
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>git clone https://github.com/olga-budickaja/lia-messenger.git</code>
+</pre>
+</div>
+</li>
+<li>
+At the root of the directory /server create a file .env with the following parameters: 
+
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>
+MYSQL_KEY = key_your_database
+CAPTCHA_KEY = some_key_for_your_captcha
+JWT_KEY = think_of_any_key
+RESULT_PAGE = 5
+PASS_SEC = think_of_any_key
+MYSQL_API = api_your_database
+CLIENT_URL = http://localhost:3000</code>
+</pre>
+</div>
+</li>
+<li>
+At the root of the directory /socket create a file .env with the following parameters: 
+
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>
+SOCKET_API = your_key_socket
+CLIENT_URL = http://localhost:3000</code>
+</pre>
+</div>
+</li>
+<li>
+At the root of the directory /client create a file .env with the following parameters:
+
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>
+REACT_APP_CAPTCHA_KEY = key_your_captcha
+//data from your firebase database
+REACT_APP_API_KEY="..."
+REACT_APP_AUTH_DOMAIN="..."
+REACT_APP_PROJECT_ID="..."
+REACT_APP_STORAGE_BUCKET="..."
+REACT_APP_MESSAGING_SENDER_ID="..."
+REACT_APP_ID="..."
+//
+REACT_APP_SOCKET_URL = "ws://localhost:8900"
+REACT_APP_MYSQL_URL = "http://localhost:8800/api/"
+</code>
+</pre>
+</div>
+</li>
+<li>
+Open directory in the terminal: ...my-proect/socket. And enter the command  in the terminal
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>npm install</code>
+</pre>
+</div>
+then enter the command here
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>npm start</code>
+</pre>
+</div>
+</li>
+
+<li>
+Open directory in the terminal: ...my-proect/server. And enter the command  in the terminal
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>npm install</code>
+</pre>
+</div>
+then enter the command here
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>npm start</code>
+</pre>
+</div>
+</li>
+<li>
+Open directory in the terminal: ...my-proect/client. And enter the command  in the terminal
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>npm install</code>
+</pre>
+</div>
+then enter the command here
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+<pre class="notranslate">
+<code>npm start</code>
+</pre>
+</div>
+</li>
+</ol><br/>
+React app will run in your browser
